@@ -10,7 +10,7 @@ include('DB/connect.php');
     <?php include("installpackage.php");?>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <?php include("navbar.php");?>
+    <?php include("nav.php");?>
     <title>Register-saler</title>
 <body>
     
@@ -22,7 +22,7 @@ include('DB/connect.php');
             <div class="container mt-3">
                 
                     <h1 class="mb-3">สมัครสมาชิกผู้ขาย</h1>
-                    <form class="form" method="post" action="./sql/regis-saler.php">
+                    <form class="form" method="post" action="./sql/regis-saler.php" enctype="multipart/form-data">
                         <?php if(isset($_SESSION['error'])){ ?>
                                 <div class="alert alert-danger" role="alert">
                                     <?php 
@@ -47,16 +47,37 @@ include('DB/connect.php');
                                     ?>
                                 </div>
                         <?php } ?>
-                    <div class="mb-3"><input type="text" class="form-control" placeholder="ชื่อผู้ใช้" name="username"></input></div>  
-                    <div class="mb-3"><input type="text" class="form-control" placeholder="อีเมล" name="email"></input></div>                    
-                    <div class="mb-3"><input type="password" class="form-control" placeholder="รหัสผ่าน" name="password"></input></div>
-                    <div class="mb-3"><input type="password" class="form-control" placeholder="ยืนยันรหัสผ่าน" name="password2"></input></div>
-                    <div class="mb-3"><input type="tel" class="form-control" placeholder="เบอร์โทร" name="tel"></input></div>
-                    <div class="mb-3"><input type="text" class="form-control" placeholder="ชื่อร้าน" name="descs"></input></div>
-                    <div class="mb-3"><textarea type="textarea" class="form-control" rows="5" placeholder="ที่อยู่" name="address"></textarea></div>
-                    <div class="mb-3"><input type="text" class="form-control" placeholder="รหัสบัตรประชาชน" name="idcard"></input></div>
-                    <div class="mb-3"><input type="file" class="form-control" name="img"></input></div>
+                    <div class="mb-3">
+                        <input type="text" class="form-control" placeholder="ชื่อผู้ใช้" name="username"></input>
+                    </div>  
+                    <div class="mb-3">
+                        <input type="text" class="form-control" placeholder="อีเมล" name="email"></input>
+                    </div>                    
+                    <div class="mb-3">
+                        <input type="password" class="form-control" placeholder="รหัสผ่าน" name="password"></input>
+                    </div>
+                    <div class="mb-3">
+                        <input type="password" class="form-control" placeholder="ยืนยันรหัสผ่าน" name="password2"></input>
+                    </div>
+                    <div class="mb-3">
+                        <input type="tel" class="form-control" placeholder="เบอร์โทร" name="tel"></input>
+                    </div>
+                    <div class="mb-3">
+                        <input type="text" class="form-control" placeholder="ชื่อร้าน" name="descs"></input>
+                    </div>
+                    <div class="mb-3">
+                        <textarea type="textarea" class="form-control" rows="5" placeholder="ที่อยู่" name="address"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <input type="text" class="form-control" placeholder="รหัสบัตรประชาชน" name="idcard"></input>
+                    </div>
+                    <div class="mb-3">
+                        <input type="file" class="form-control" name="imgid"></input>
+                    </div>
                     <input type="hidden" name="role" value="saler"></input>
+                      
+
+
                         <div class="mb-3">
                             <button type="submit" name="reg-saler" class="btn btn-primary">สมัครสมาชิก</button>
                         </div>

@@ -1,3 +1,4 @@
+
 <?php 
     session_start();
     include('../DB/connect.php');
@@ -32,20 +33,20 @@
             if($checkemail->rowCount() > 0){  
                 if($email == $result['email']){
                     if(password_verify($password,$result['password'])){
-                        if($result['role'] == 'admin'){
-                                $_SESSION['Admin_login'] = $result['id'];
+                        if(isset($result['role'])){
+                                $_SESSION['id'] = $result['Mid'];
+                                $_SESSION['role'] = $result['role'];
                                 $_SESSION['Name_login'] = $result['name'];
+                                $_SESSION['success'] = "<script>
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'เข้าสู่ระบบสำเร็จ',
+                                    showConfirmButton: false,
+                                    timer: 1000
+                                          });                      
+                                   </script>";
                                 header("location: ../");
-                        }elseif($result['role'] == 'saler'){
-                                $_SESSION['Saler_login'] = $result['id'];
-                                $_SESSION['Name_login'] = $result['name'];
-                                header("location: ../");
-                        }else{
-                                $_SESSION['User_login'] = $result['id'];
-                                $_SESSION['Name_login'] = $result['name'];
-                                header("location: ../");
-                        }
-
+                            }
                     }else{
                         $_SESSION['error'] = 'รหัสผ่านไม่ถูกต้อง';
                         header("location: ../login.php");
@@ -67,4 +68,3 @@
     }
 
 ?>
-

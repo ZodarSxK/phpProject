@@ -16,24 +16,7 @@
   }
 
 ?>
-<!-- if(!$conn){
-    echo "fale";
-  }
-  else{ 
-    echo "true";
-  }
-
-$sql = "คำสั่ง sql";
-mysqli_query($conn,$sql);
-
-echo "<pre>"; print_r($_POST['email']) ;  echo "</pre>";
-
-var_dump($_POST);
-
-
-$_SERVER["REQUEST_METHOD"] == "POST" 
 
 
 
--->
 
