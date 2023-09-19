@@ -4,7 +4,7 @@ require '../DB/connect.php';
 
 $id = $_SESSION['id'];
 
-$sql ="SELECT * FROM products WHERE owner = $id";
+$sql ="SELECT products.pid, category.name, products.Code FROM category INNER JOIN products ON category.Cid=products.Cid WHERE products.owner=$id ";
 $query = $conn->prepare($sql);
 $query->execute();
 $result = $query->fetchAll(PDO::FETCH_ASSOC);
@@ -58,14 +58,38 @@ $result = $query->fetchAll(PDO::FETCH_ASSOC);
                     </div>
                 </nav>
                 <!-- Page content-->
-                <div class="container-fluid">
+        <div class="container-fluid ">
+            <h1 class="mt-2">Code Management</h1>
+            <!-- body -->
+            <div class="contrainer-fluid mt-3  border-top">
+                <table class="table table-sm mt-4">
+                    <thead>
+                        <tr>
+                            <th scope="col">ID</th>
+                            <th scope="col">ชื่อเกม</th>
+                            <th scope="col">รหัสโค้ดเกม</th>
+                        </tr>
+                    </thead>
+                    <tbody>
 
-                        <h1>mykey</h1>
-                        <?= $_SESSION['id']?>
-                  
-                </div>
+                        <?php
+                        if ($query->rowCount() > 0) {
+                            foreach ($result as $row) {
+                        ?>
+                                <tr>
+                                    <td><?= $row['pid']; ?></td>
+                                    <td><?= $row['name']; ?></td>
+                                    <td><?= $row['Code'] ?></td>
+                                </tr>
+                        <?php }
+                        }
+                        ?>
+                    </tbody>
+                </table>
             </div>
         </div>
+    </div>
+    </div>
         <!-- Bootstrap core JS-->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
         <!-- Core theme JS-->

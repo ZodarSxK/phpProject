@@ -89,15 +89,14 @@ $result = $qurey->fetchAll(PDO::FETCH_ASSOC);
                             $cid = $row['Cid'];
                             $qur = $conn->prepare("SELECT COUNT(cid) count FROM products WHERE cid=$cid");
                             $qur->execute();
-                            
+
                             $res = $qur->fetch(PDO::FETCH_ASSOC);
                     ?>
-
+                        
                             <div class="card m-2 p-2" style="width: 14rem; ">
                                 <img style=" height:13rem; padding-top: 5px;" src="../assets/imgs/<?= $row['img'] ?>" class="card-img-top" alt="...">
                                 <div class="card-body d-inline-block py-1 px-2 mt-1 mb-2">
                                     <h5><?= $row['name'] ?></h5>
-                                    <h5><?= $row['Cid'] ?></h5>
                                     <h6>ราคา <?= $row['cost'] ?> บาท</h6>
                                     <p>คงเหลือ : <?= $res['count'] ?></p>
                                 </div>

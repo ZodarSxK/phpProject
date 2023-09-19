@@ -20,6 +20,7 @@ if (isset($_SESSION['id'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./assets/css/styles.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- IONICONS -->
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
@@ -37,7 +38,7 @@ if (isset($_SESSION['id'])) {
     include('./modalall.php');
     ?>
     <!-- Nav -->
-    <div class="container-fluid">
+    <div class="container-fluid border-bottom">
         <header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-2">
             <a href="/project" class="d-flex align-items-center col-md-3 mb-2 ms-2 mb-md-0 text-dark text-decoration-none">
                 <!-- <svg class="bi me-2" width="40" height="32" role="img" aria-label="Bootstrap"><use xlink:href="#bootstrap"></use></svg> -->
