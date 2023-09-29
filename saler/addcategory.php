@@ -11,6 +11,28 @@ $qurey->execute();
 
 $result = $qurey->fetchAll(PDO::FETCH_ASSOC);
 
+if (isset($_GET['delete'])) {
+    $id = $_GET['delete'];
+
+    $sql = "DELETE FROM category WHERE Cid = :id";
+    $delete = $conn->prepare($sql);
+    $delete->bindParam(':id', $id);
+    $delete->execute();
+
+    if ($delete) {
+        $_SESSION['success'] = "<script>
+                Swal.fire({
+                icon: 'success',
+                title: 'ลบเกมเรียบร้อย',
+                showConfirmButton: false,
+                timer: 2000
+                    });                      
+            </script>";
+        header("refresh:0.5; url=addcategory.php");
+    }
+    
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -45,6 +67,12 @@ $result = $qurey->fetchAll(PDO::FETCH_ASSOC);
         <?php
         echo $_SESSION['error'];
         unset($_SESSION['error']);
+        ?>
+    <?php } ?>
+    <?php if (isset($_SESSION['confirm'])) { ?>
+        <?php
+        echo $_SESSION['confirm'];
+        unset($_SESSION['confirm']);
         ?>
     <?php } ?>
     <?php
@@ -92,13 +120,15 @@ $result = $qurey->fetchAll(PDO::FETCH_ASSOC);
 
                             $res = $qur->fetch(PDO::FETCH_ASSOC);
                     ?>
-                        
+
                             <div class="card m-2 p-2" style="width: 14rem; ">
                                 <img style=" height:13rem; padding-top: 5px;" src="../assets/imgs/<?= $row['img'] ?>" class="card-img-top" alt="...">
                                 <div class="card-body d-inline-block py-1 px-2 mt-1 mb-2">
+                                    <h5><?= $row['Cid']; ?></h5>
                                     <h5><?= $row['name'] ?></h5>
                                     <h6>ราคา <?= $row['cost'] ?> บาท</h6>
                                     <p>คงเหลือ : <?= $res['count'] ?></p>
+                                    <td><a href="?delete=<?= $row['Cid']; ?>" class="btn btn-danger" onclick="confirm('ต้องการที่จะลบเกมนี้? เกมที่ยังคงเหลือจะถูกลบไปด้วย');">ลบ</a></td>
                                 </div>
                             </div>
                     <?php }
@@ -110,7 +140,6 @@ $result = $qurey->fetchAll(PDO::FETCH_ASSOC);
             <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
             <!-- Core theme JS-->
             <script src="./assets/js/scripts.js"></script>
-
 </body>
 
 </html>

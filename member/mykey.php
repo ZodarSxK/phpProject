@@ -59,7 +59,7 @@ $result = $query->fetchAll(PDO::FETCH_ASSOC);
                 </nav>
                 <!-- Page content-->
         <div class="container-fluid ">
-            <h1 class="mt-2">Code Management</h1>
+            <h1 class="mt-2">คีย์ของฉัน</h1>
             <!-- body -->
             <div class="contrainer-fluid mt-3  border-top">
                 <table class="table table-sm mt-4">

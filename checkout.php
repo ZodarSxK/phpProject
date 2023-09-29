@@ -1,4 +1,6 @@
 <?php
+session_start();
+include("./DB/connect.php");
 // print('<pre>');
 // print_r($_POST);
 // print('</pre>');
@@ -28,6 +30,22 @@ echo($charge['status']);
 // print('</pre>');
 if($charge['status'] == 'successful'){
   echo "ชำระเงินสำเร็จ";
+
+  foreach ($_SESSION['cart'] as $key => $val) {
+    echo $_SESSION['cart'][$key]['Cid'];
+    echo $_SESSION['cart'][$key]['cost'];
+
+    $cid = $_SESSION['cart'][$key]['Cid'];
+    $id = $_SESSION['id'];
+    $cost = $_SESSION['cart'][$key]['cost'];
+
+    $query = $conn->prepare("UPDATE products SET status='sold',owner=$id,income=$cost WHERE Cid = $cid AND status='' LIMIT 1");
+    $query->execute();
+
+
+
+}
+ 
   
 }
 

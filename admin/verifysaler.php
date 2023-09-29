@@ -31,7 +31,6 @@ require '../DB/connect.php';
                     <a class="list-group-item list-group-item-action list-group-item-light p-3" href="./">Dashboard</a>
                     <a class="list-group-item list-group-item-action list-group-item-light p-3" href="manageUser.php">ManageMember</a>
                     <a class="list-group-item list-group-item-action list-group-item-light p-3" href="verifysaler.php">Verifysaler</a>
-                    <a class="list-group-item list-group-item-action list-group-item-light p-3" href="soldcode.php">สินค้าที่ขายแล้ว</a>
                     <a class="list-group-item list-group-item-action list-group-item-light p-3" href="in-outcome.php">รายได้ทั้งหมด</a>
                 </div>
             </div>
