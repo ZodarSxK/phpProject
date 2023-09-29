@@ -42,6 +42,9 @@ if($charge['status'] == 'successful'){
     $query = $conn->prepare("UPDATE products SET status='sold',owner=$id,income=$cost WHERE Cid = $cid AND status='' LIMIT 1");
     $query->execute();
 
+    if($query){
+      header("location: ./member/mykey.php");
+    }
 
 
 }
