@@ -1,10 +1,9 @@
-<?php 
-    session_start();
-    include('../DB/connect.php');
+<?php
+session_start();
+include('../DB/connect.php');
 
-    if(isset($_POST['reg-saler'])){
-
-        $username = $_POST['username'];
+if(isset($_POST['regsaler'])){
+    $username = $_POST['username'];
         $email = $_POST['email'];
         $password = $_POST['password'];
         $password2 = $_POST['password2'];
@@ -111,7 +110,14 @@
 
                                 $insert->execute();
                                 
-                                $_SESSION['success'] = "สมัครสมาชิกเรียบร้อย";
+                                $_SESSION['success'] = "<script>
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'สมัครสมาชิกเรียบร้อย',
+                                    showConfirmButton: false,
+                                    timer: 1000
+                                          });                      
+                                   </script>";
                                 header("location: ../");
                             }
                         }
@@ -130,4 +136,8 @@
                 echo $err->getMessage();
             }
         }
-    }
+}
+
+
+
+?>

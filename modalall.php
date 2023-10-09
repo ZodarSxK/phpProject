@@ -123,17 +123,15 @@
                     <img class="mb-4" src="./assets/imgs/logo-bg.png" alt="" width="100" height="100">
                 </div>
                 <!-- form -->
-                <form method="post" action="./sql/regis-saler.php" enctype="multipart/form-data">
+                <form method="post" action="./sql/regsaler.php" enctype="multipart/form-data">
                     <h1 class="h3 mb-3 fw-normal text-center">Register-Saler</h1>
 
                     <?php if (isset($_SESSION['error'])) { ?>
                         <div class="alert alert-danger" role="alert">
-
                             <?php
                             echo $_SESSION['error'];
                             unset($_SESSION['error']);
                             ?>
-
                         </div>
                     <?php } ?>
 
@@ -151,11 +149,11 @@
                     </div>
                     <div class="form-floating mb-3">
                         <input type="password" class="form-control" id="floatingPassword2" name="password2" required>
-                        <label for="floatingPassword2">ConfirmPassword</label>
+                        <label for="floatingPassword2">Confirm Password</label>
                     </div>
                     <div class="form-floating mb-3">
                         <input type="tel" class="form-control" id="floatingtel" name="tel" required>
-                        <label for="floatingtel">tel</label>
+                        <label for="floatingtel">Telephone</label>
                     </div>
                     <div class="form-floating mb-3">
                         <input type="text" class="form-control" id="floatingdesc" name="descs" required>
@@ -163,7 +161,6 @@
                     </div>
                     <div class="form-floating mb-3">
                         <textarea class="form-control" id="floatingaddress" name="address" cols="10" required></textarea>
-                        <!-- <input type="text" class="form-control"  placeholder="Address" name="address"> -->
                         <label for="floatingaddress">Address</label>
                     </div>
                     <div class="form-floating mb-3">
@@ -173,13 +170,14 @@
                     <div class="form-control mb-3">
                         <input type="file" class="form-control" placeholder="IMG IDCard" name="imgid" required>
                     </div>
-                    <input type="hidden" name="role" value="saler"></input>
-                    <a class="w-100 btn btn-lg btn-primary" type="submit" name="reg-saler">Register</a>
+                    <input type="hidden" name="role" value="saler">
+                    <button class="w-100 btn btn-lg btn-primary" type="submit" name="regsaler">Register</button>
                 </form>
             </div>
         </div>
     </div>
 </div>
+
 <!-- end-Modal Register-Saler -->
 
 <!-- Modal Add code -->

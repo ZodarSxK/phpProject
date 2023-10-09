@@ -9,7 +9,7 @@ if (!isset($_SESSION['id'])) {
     title: 'กรุณเข้าสู่ระบบก่อนทำการซื้อ'
           });                      
    </script>";
-    header("location: index.php");
+    header("location: allproduct.php");
 } else {
     if (isset($_POST['buy'])) {
         echo "ซื้อ";
@@ -34,18 +34,18 @@ if (!isset($_SESSION['id'])) {
                 foreach ($_SESSION['cart'] as $key => $val) {
                     if ($_SESSION['cart'][$key]['Cid'] == $cid) {
                         $_SESSION['cart'][$key]['quantity'] = $_SESSION['cart'][$key]['quantity'] + $quantity;
-                        header("location: cart.php");
+                        header("location: cart2.php");
                     }
                 }
             } else {
                 $_SESSION['cart'][] = $product_arr;
-                header("location: cart.php");
+                header("location: cart2.php");
             }
         } else {
             $_SESSION['cart'][] = $product_arr;
-            header("location: cart.php");
+            header("location: cart2.php");
         }
-        header("location:cart.php");
+        header("location:cart2.php");
     }
     if (isset($_POST['addcart'])) {
         echo "ตะกร้า";
@@ -65,11 +65,25 @@ if (!isset($_SESSION['id'])) {
         );
         if (!empty($_SESSION['cart'])) {
             $product_id = array_column($_SESSION['cart'], 'Cid');
+            $qur = $conn->prepare("SELECT COUNT(cid) count FROM products WHERE cid=$cid and status =''");
+            $qur->execute();
+
+            $re = $qur->fetch(PDO::FETCH_ASSOC);
+
             if (in_array($cid, $product_id)) {
                 foreach ($_SESSION['cart'] as $key => $val) {
                     if ($_SESSION['cart'][$key]['Cid'] == $cid) {
-                        $_SESSION['cart'][$key]['quantity'] = $_SESSION['cart'][$key]['quantity'] + $quantity;
-                        $_SESSION['success'] = "<script>
+                        if ($re['count'] == $_SESSION['cart'][$key]['quantity']) {
+                            $_SESSION['A'] = "<script>
+                                                Swal.fire({
+                                                icon: 'error',
+                                                title: 'สินค้าชิ้นนี้หมดแล้ว'
+                                                    });                      
+                                            </script>";
+                            header("location: allproduct.php");
+                        } else {
+                            $_SESSION['cart'][$key]['quantity'] = $_SESSION['cart'][$key]['quantity'] + $quantity;
+                            $_SESSION['success'] = "<script>
                 Swal.fire({
                 icon: 'success',
                 title: 'เพิ่มสินค้าเรียบร้อย',
@@ -78,7 +92,8 @@ if (!isset($_SESSION['id'])) {
                       });                      
                </script>";
 
-                        header("location: ./");
+                            header("location: allproduct.php");
+                        }
                     }
                 }
             } else {
@@ -92,7 +107,7 @@ if (!isset($_SESSION['id'])) {
                       });                      
                </script>";
 
-                header("location: ./");
+                header("location: allproduct.php");
             }
         } else {
             $_SESSION['cart'][] = $product_arr;
@@ -105,22 +120,22 @@ if (!isset($_SESSION['id'])) {
                                             });                      
                                     </script>";
 
-            header("location: ./");
+            header("location: allproduct.php");
         }
-        header("location:./");
+        header("location: allproduct.php");
     }
 
     if (isset($_GET['remove_item'])) {
         $index = $_GET['remove_item'];
         if (isset($_SESSION['cart'])) {
             unset($_SESSION['cart'][$index]);
-            header("location:cart.php");
+            header("location:cart2.php");
         }
     }
     if (isset($_GET['remove_itemall'])) {
         if (isset($_SESSION['cart'])) {
             unset($_SESSION['cart']);
-            header("location:cart.php");
+            header("location:cart2.php");
         }
     }
 }

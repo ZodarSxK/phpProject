@@ -24,9 +24,8 @@ if (isset($_GET['delete'])) {
 }
 $id = $_SESSION['id'];
 
-$sql = "SELECT products.pid, category.name, products.Code FROM category INNER JOIN products ON category.Cid=products.Cid WHERE products.Mid=:id AND status=''";
+$sql = "SELECT products.pid, category.name, products.Code FROM category INNER JOIN products ON category.Cid=products.Cid WHERE products.status='' AND category.Mid = $id ";
 $check_data = $conn->prepare($sql);
-$check_data->bindParam(':id', $id);
 $check_data->execute();
 $result = $check_data->fetchAll(PDO::FETCH_ASSOC);
 
@@ -129,7 +128,9 @@ $result = $check_data->fetchAll(PDO::FETCH_ASSOC);
                                         <td><a href="?delete=<?= $row['pid']; ?>" class="btn btn-danger" onclick="return confirm('ต้องการที่จะลบโค้ดนี้?');">ลบ</a></td>
                                     </tr>
                             <?php }
-                            }
+                            }else{
+                            ?>
+                            <?php }
                             ?>
                         </tbody>
                     </table>

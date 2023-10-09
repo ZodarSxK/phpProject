@@ -2,7 +2,7 @@
 session_start();
 require '../DB/connect.php';
 $id = $_SESSION['id'];
-$sql = "SELECT products.pid, category.name, products.Code FROM category INNER JOIN products ON category.Cid=products.Cid WHERE products.Mid=$id AND status='sold'";
+$sql = "SELECT products.pid, category.name, products.Code FROM category INNER JOIN products ON category.Cid=products.Cid WHERE products.status='sold'";
 $qurey = $conn->prepare($sql);
 $qurey->execute();
 
@@ -68,8 +68,10 @@ $result = $qurey->fetchAll(PDO::FETCH_ASSOC);
                                     <td><?= $row['Code'] ?></td>
                                 </tr>
                         <?php }
-                        }
+                        }else{
                         ?>
+                        <?php }
+                            ?>
                     </tbody>
                 </table>
             </div>

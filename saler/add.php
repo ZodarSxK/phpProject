@@ -19,10 +19,9 @@ if (isset($_POST['submit'])) {
 
     if ($check_data->rowCount() == 0) {
 
-        $sql = "INSERT INTO products (Mid,Cid,Code) VALUES (:id,:Cid,:code)";
+        $sql = "INSERT INTO products (Cid,Code) VALUES (:Cid,:code)";
 
         $additem = $conn->prepare($sql);
-        $additem->bindParam(':id', $id);
         $additem->bindParam(':Cid', $Cid);
         $additem->bindParam(':code', $code);
 

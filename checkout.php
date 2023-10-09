@@ -38,8 +38,9 @@ if($charge['status'] == 'successful'){
     $cid = $_SESSION['cart'][$key]['Cid'];
     $id = $_SESSION['id'];
     $cost = $_SESSION['cart'][$key]['cost'];
+    $quantity = $_SESSION['cart'][$key]['quantity'];
 
-    $query = $conn->prepare("UPDATE products SET status='sold',owner=$id,income=$cost WHERE Cid = $cid AND status='' LIMIT 1");
+    $query = $conn->prepare("UPDATE products SET status='sold',owner=$id,income=$cost WHERE Cid = $cid AND status='' LIMIT $quantity");
     $query->execute();
 
     if($query){

@@ -10,16 +10,16 @@ if (isset($_POST['login'])) {
 
     if (empty($email)) {
         $_SESSION['error'] = 'กรุณากรอกอีเมล';
-        header("location: ../login.php");
+        header("location: ../");
     } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $_SESSION['error'] = 'รูปแบบอีเมลไม่ถูกต้อง';
-        header("location: ../login.php ");
+        header("location: ../");
     } elseif (empty($password)) {
         $_SESSION['error'] = 'กรุณากรอกรหัสผ่าน';
-        header("location: ../login.php ");
+        header("location: ../");
     } elseif (strlen($_POST['password']) < 5 || strlen($_POST['password']) > 20) {
         $_SESSION['error'] = 'รหัสผ่านต้องมีความยาว 5 ถึง 20 ตัวอักษร';
-        header("location: ../login.php ");
+        header("location: ../");
     } else {
         try {
             //code...

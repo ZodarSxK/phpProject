@@ -30,7 +30,10 @@ $product = $qureypro->fetchAll(PDO::FETCH_ASSOC);
 <body>
 
   <?php include("nav.php"); ?>
-
+  <?php
+  echo $_SESSION['error'];
+  unset($_SESSION['error']);
+  ?>
   <?php if (isset($_SESSION['success'])) { ?>
     <?php
     echo $_SESSION['success'];
@@ -72,7 +75,7 @@ $product = $qureypro->fetchAll(PDO::FETCH_ASSOC);
         foreach ($product as $row) {
 
           $cid = $row['Cid'];
-          $qur = $conn->prepare("SELECT COUNT(cid) count FROM products WHERE cid=$cid");
+          $qur = $conn->prepare("SELECT COUNT(cid) count FROM products WHERE cid=$cid and status =''");
           $qur->execute();
 
           $res = $qur->fetch(PDO::FETCH_ASSOC);

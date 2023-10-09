@@ -46,9 +46,9 @@ if (isset($_SESSION['id'])) {
             </a>
 
             <ul id="navli" class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0 ">
-                <li><a href="#" class="nav-link px-2 link-dark">Home</a></li>
-                <li><a href="#" class="nav-link px-2 link-dark">About</a></li>
-                <li><a href="#" class="nav-link px-2 link-dark">Contract</a></li>
+                <li><a href="./" class="nav-link px-2 link-dark">หน้าหลัก</a></li>
+                <li><a href="allproduct.php" class="nav-link px-2 link-dark">สินค้าทั้งหมด</a></li>
+                <li><a href="#" class="nav-link px-2 link-dark">ติดต่อ</a></li>
             </ul>
 
             <?php if (isset($_SESSION['role'])) { ?>
