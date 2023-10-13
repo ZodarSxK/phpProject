@@ -37,20 +37,43 @@ if($charge['status'] == 'successful'){
 
     $cid = $_SESSION['cart'][$key]['Cid'];
     $id = $_SESSION['id'];
+    $name = $_SESSION['cart'][$key]['name'];
     $cost = $_SESSION['cart'][$key]['cost'];
     $quantity = $_SESSION['cart'][$key]['quantity'];
 
-    $query = $conn->prepare("UPDATE products SET status='sold',owner=$id,income=$cost WHERE Cid = $cid AND status='' LIMIT $quantity");
-    $query->execute();
+    $checksaler = $conn->prepare("SELECT * FROM products INNER JOIN category ON products.Cid = category.Cid WHERE products.Cid = $cid AND products.status='' LIMIT $quantity");
+    $checksaler->execute();
 
-    if($query){
-      header("location: ./member/mykey.php");
+    $resproduct = $checksaler->fetchAll(PDO::FETCH_ASSOC);
+
+    if($checksaler->rowCount() > 0){
+      foreach($resproduct as $row){
+        $pid = $row['pid'];
+        $Mid = $row['Mid'];
+        $insertorder = $conn->prepare("INSERT INTO ordersold (pid,Mid_sale,Mid_buy,name,cost) VALUES ($pid,$Mid,$id,'$name',$cost)");
+        $insertorder->execute();
+        $query = $conn->prepare("UPDATE products SET status='sold',owner=$id,income=$cost WHERE Cid = $cid AND status='' LIMIT $quantity");
+        $query->execute();
+      }
+      // unset($_SESSION['cart']);
+      header("location: ./member/mykey.php?cart=1");
     }
+    // if($checksaler){
+    //   $query = $conn->prepare("UPDATE products SET status='sold',owner=$id,income=$cost WHERE Cid = $cid AND status='' LIMIT $quantity");
+    //   $query->execute();
+    // }
+    
+
+    
+
+    
+
+    // if($query){
+    //   header("location: ./member/mykey.php");
+    // }
 
 
 }
  
   
 }
-
-?>

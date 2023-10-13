@@ -33,7 +33,8 @@ if (isset($_POST['login'])) {
                 if ($email == $result['email']) {
                     if (password_verify($password, $result['password'])) {
                         if (isset($result['role'])) {
-                            $_SESSION['id'] = $result['Mid'];
+                            $Mid = $result['Mid'];
+                            $_SESSION['id'] = $Mid;
                             $_SESSION['role'] = $result['role'];
                             $_SESSION['Name_login'] = $result['name'];
                             $_SESSION['success'] = "<script>
@@ -44,7 +45,16 @@ if (isset($_POST['login'])) {
                                     timer: 1000
                                           });                      
                                    </script>";
-                            header("location: ../");
+                            $checklicence = $conn->prepare("SELECT * FROM licence WHERE Mid = $Mid");
+                            $checklicence->execute();
+                            if($checklicence->rowCount() > 0){
+                                header("location: ../");
+                            }else{
+                                $insertlicence = $conn->prepare("INSERT INTO licence (Mid) VALUES ($Mid)");
+                                $insertlicence->execute();
+                                header("location: ../");
+                            }
+                            
                         }
                     } else {
                         $_SESSION['A'] = "<script>

@@ -2,7 +2,7 @@
 session_start();
 require '../DB/connect.php';
 $id = $_SESSION['id'];
-$sql = "SELECT products.pid, category.name, products.Code FROM category INNER JOIN products ON category.Cid=products.Cid WHERE products.status='sold'";
+$sql = "SELECT products.pid, category.name, products.Code FROM category INNER JOIN products ON category.Cid=products.Cid WHERE products.status='sold' AND category.Mid = $id ";
 $qurey = $conn->prepare($sql);
 $qurey->execute();
 
@@ -20,6 +20,9 @@ $result = $qurey->fetchAll(PDO::FETCH_ASSOC);
     <meta name="author" content="" />
     <link rel="icon" type="image/x-icon" href="./assets/imgs/logo-bg.png">
     <title>Sold code</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
     <!-- Core theme CSS (includes Bootstrap)-->
     <link href="./assets/css/styles.css" rel="stylesheet" />
     <!-- IONICONS -->
@@ -43,45 +46,67 @@ $result = $qurey->fetchAll(PDO::FETCH_ASSOC);
                 <a class="list-group-item list-group-item-action list-group-item-light p-3" href="in-outcome.php">รายได้ทั้งหมด</a>
             </div>
         </div>
-        <!-- Page content-->
-        <div class="container-fluid ">
-            <h1 class="mt-2">สินค้าที่ขายแล้ว</h1>
-            <!-- body -->
-            <div class="contrainer-fluid mt-3  border-top">
-                <table class="table table-sm mt-4">
-                    <thead>
-                        <tr>
-                            <th scope="col">ID</th>
-                            <th scope="col">ชื่อเกม</th>
-                            <th scope="col">รหัสโค้ดเกม</th>
-                        </tr>
-                    </thead>
-                    <tbody>
+        <div id="page-content-wrapper">
+            <!-- Top navigation-->
+            <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
+                <div class="container-fluid">
+                    <button class="btn btn-light" id="sidebarToggle"><ion-icon name="arrow-back-outline"></ion-icon></button>
+                    <!-- <button class="btn btn-primary" id="sidebarToggle"></button> -->
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <ul class="navbar-nav ms-auto mt-2 mt-lg-0">
+                            <li class="nav-item active"><a class="nav-link" href="../">หน้าแรก</a></li>
+                            <li class="nav-item"><a class="nav-link" href="../logout.php">ออกจากระบบ</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+            <!-- Page content-->
+            <div class="container-fluid ">
+                <h1 class="mt-2">สินค้าที่ขายแล้ว</h1>
+                <!-- body -->
+                <div class="contrainer-fluid mt-3  border-top">
+                <table class="table table-striped table-hover" style="width:100%" id="myTable">
+                        <thead>
+                            <tr>
+                                <th scope="col">ID</th>
+                                <th scope="col">ชื่อเกม</th>
+                                <th scope="col">รหัสโค้ดเกม</th>
+                            </tr>
+                        </thead>
+                        <tbody>
 
-                        <?php
-                        if ($qurey->rowCount() > 0) {
-                            foreach ($result as $row) {
-                        ?>
-                                <tr>
-                                    <td><?= $row['pid']; ?></td>
-                                    <td><?= $row['name']; ?></td>
-                                    <td><?= $row['Code'] ?></td>
-                                </tr>
-                        <?php }
-                        }else{
-                        ?>
-                        <?php }
+                            <?php
+                            if ($qurey->rowCount() > 0) {
+                                foreach ($result as $row) {
                             ?>
-                    </tbody>
-                </table>
+                                    <tr>
+                                        <td><?= $row['pid']; ?></td>
+                                        <td><?= $row['name']; ?></td>
+                                        <td><?= $row['Code'] ?></td>
+                                    </tr>
+                                <?php }
+                            } else {
+                                ?>
+                            <?php }
+                            ?>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
-    </div>
     </div>
     <!-- Bootstrap core JS-->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Core theme JS-->
     <script src="./assets/js/scripts.js"></script>
+
+    <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+    <script>
+        new DataTable('#myTable');
+    </script>
 
 </body>
 

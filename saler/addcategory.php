@@ -44,7 +44,7 @@ if (isset($_GET['delete'])) {
     <meta name="description" content="" />
     <meta name="author" content="" />
     <link rel="icon" type="image/x-icon" href="./assets/imgs/logo-bg.png">
-    <title>Personal info</title>
+    <title>add game</title>
     <!-- Core theme CSS (includes Bootstrap)-->
     <link href="./assets/css/styles.css" rel="stylesheet" />
     <!-- IONICONS -->
@@ -115,7 +115,7 @@ if (isset($_GET['delete'])) {
                     <?php if ($qurey->rowCount() > 0) {
                         foreach ($result as $row) {
                             $cid = $row['Cid'];
-                            $qur = $conn->prepare("SELECT COUNT(cid) count FROM products WHERE cid=$cid");
+                            $qur = $conn->prepare("SELECT COUNT(cid) count FROM products WHERE cid=$cid AND status=''");
                             $qur->execute();
 
                             $res = $qur->fetch(PDO::FETCH_ASSOC);
@@ -128,7 +128,7 @@ if (isset($_GET['delete'])) {
                                     <h5><?= $row['name'] ?></h5>
                                     <h6>ราคา <?= $row['cost'] ?> บาท</h6>
                                     <p>คงเหลือ : <?= $res['count'] ?></p>
-                                    <td><a href="?delete=<?= $row['Cid']; ?>" class="btn btn-danger" onclick="confirm('ต้องการที่จะลบเกมนี้? เกมที่ยังคงเหลือจะถูกลบไปด้วย');">ลบ</a></td>
+                                    <td><a href="?delete=<?= $row['Cid']; ?>" class="btn btn-danger" onclick="return confirm('ต้องการที่จะลบเกมนี้? เกมที่ยังคงเหลือจะถูกลบไปด้วย');">ลบ</a></td>
                                 </div>
                             </div>
                     <?php }

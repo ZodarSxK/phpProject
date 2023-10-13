@@ -57,32 +57,30 @@ if (isset($_GET['namegame'])) {
                     $qur->execute();
 
                     $res = $qur->fetch(PDO::FETCH_ASSOC);
-                    echo $res['count'];
+
                     if ($res['count'] > 0) {
-            ?> 
-                        
-                            <div class="card m-2 p-2" style="width: 14rem; "><a href="showproduct.php?Cid=<?= $row['Cid'] ?>" style="text-decoration: none;color:black;">
+            ?>
+                        <div class="card m-2 p-2" style="width: 14rem; "><a href="showproduct.php?Cid=<?= $row['Cid'] ?>" style="text-decoration: none;color:black;">
 
-                                    <?= $quantity ?>
-                                    <?= $row['Cid'] ?>
-                                    <?= $res['count'] ?>
-                                    <img style=" height:13rem; padding-top: 5px;" src="./assets/imgs/<?= $row['img'] ?>" class="card-img-top" alt="...">
-                                    <div class="card-body d-inline-block py-1 px-2 mt-1 mb-2">
-                                        <h5><?= $row['name'] ?></h5>
-                                        <p>ราคา <?= $row['cost'] ?> บาท</p>
-                                    </div>
-                                    <div>
-                                        <form action="./cart2.php?Cid=<?= $row['Cid'] ?>&quantity=1" method="post" class="card-body border-top pt-1 d-flex justify-content-between align-items-center">
-                                            <input type="hidden" value="<?= $row['cost'] ?>" name="cost">
-                                            <input type="hidden" value="<?= $row['Cid'] ?>" name="idinfo">
-                                            <button type="submit" class="btn btn-link" name="addcart" class=" pt-1"><ion-icon name="cart-outline" style="font-size: 1.6rem;"></ion-icon></button>
-                                            <button type="submit" name="buy" class="btn btn-success">ซื้อ</button>
-                                        </form>
-                                    </div>
-                                </a>
-                            </div>
+                                <?= $row['Cid'] ?>
+                                <?= $res['count'] ?>
+                                <img style=" height:13rem; padding-top: 5px;" src="./assets/imgs/<?= $row['img'] ?>" class="card-img-top" alt="...">
+                                <div class="card-body d-inline-block py-1 px-2 mt-1 mb-2">
+                                    <h5><?= $row['name'] ?></h5>
+                                    <p>ราคา <?= $row['cost'] ?> บาท</p>
+                                </div>
+                                <div>
+                                    <form action="./cart.php?Cid=<?= $row['Cid'] ?>&quantity=1" method="post" class="card-body border-top pt-1 d-flex justify-content-between align-items-center">
+                                        <input type="hidden" value="<?= $row['cost'] ?>" name="cost">
+                                        <input type="hidden" value="<?= $row['Cid'] ?>" name="idinfo">
+                                        <button type="submit" class="btn btn-link" name="addcart2" class=" pt-1"><ion-icon name="cart-outline" style="font-size: 1.6rem;"></ion-icon></button>
+                                        <button type="submit" name="buy" class="btn btn-success">ซื้อ</button>
+                                    </form>
+                                </div>
+                            </a>
+                        </div>
 
-            <?php 
+            <?php
                     }
                 }
             } ?>

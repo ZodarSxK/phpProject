@@ -2,6 +2,27 @@
 session_start();
 require '../DB/connect.php';
 
+if (isset($_GET['Mid'])) {
+    $id = $_SESSION['id'];
+    $Mid = $_GET['Mid'];
+
+    echo "ยืนยัน";
+
+    $sql ="UPDATE licence SET Mid_ver = $id, status ='pass' WHERE Mid = $Mid";
+    $query = $conn->prepare($sql);
+    $query->execute();
+    $_SESSION['success'] = "<script>
+                  Swal.fire({
+                      icon: 'success',
+                      title: 'ยืนยันตัวตนผู้ขายเรียบร้อย',
+                      showConfirmButton: false,
+                      timer: 2000
+                            });                      
+                     </script>";
+
+    header("location: verifysaler.php");
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -28,20 +49,6 @@ require '../DB/connect.php';
 </head>
 
 <body>
-    <!-- session -->
-    <?php if(isset($_SESSION['success'])){ ?>
-        <?php 
-            echo $_SESSION['success'];
-            unset($_SESSION['success']);
-        ?>                              
-        <?php } ?>
-        <?php if(isset($_SESSION['error'])){ ?>
-        <?php 
-            echo $_SESSION['error'];
-            unset($_SESSION['error']);
-        ?>                              
-        <?php } ?>
-    
     <div class="d-flex" id="wrapper">
         <!-- Sidebar-->
         <div class="border-end bg-white" id="sidebar-wrapper">
@@ -73,43 +80,26 @@ require '../DB/connect.php';
             <div class="container-fluid mt-2">
                 <h1>verifysaler</h1>
                 <div class="container-fluid border-top pt-2 mt-3">
-                    <table class="table table-striped table-hover" style="width:100%" id="myTable">
-                        <thead>
-                            <tr>
-                                <th>รหัสร้าน</th>
-                                <th>ชื่อร้าน</th>
-                                <th>รายละเอียด</th>
-                                <th>รหัสประจำตัวประชาชน</th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <?php
-                        $qurrole = $conn->prepare("SELECT * FROM licence INNER JOIN members ON licence.Mid = members.Mid WHERE members.role = 'saler'");
-                        $qurrole->execute();
+                    <?php
+                    $Mid = $_GET['id'];
 
-                        $resrole = $qurrole->fetchAll(PDO::FETCH_ASSOC);
+                    $qurrole = $conn->prepare("SELECT * FROM licence INNER JOIN members ON licence.Mid = members.Mid WHERE licence.Mid = $Mid");
+                    $qurrole->execute();
 
-                        if ($qurrole->rowCount() > 0) {
-                            foreach ($resrole as $row) {
-                        ?>
-                                <tbody>
-                                    <tr>
-                                        <td><?= $row['Mid'] ?></td>
-                                        <td><?= $row['name'] ?></td>
-                                        <td><?= $row['descs'] ?></td>
-                                        <td><?= $row['idcard'] ?></td>
-                                        <td>
-                                            <?php if($row['status'] != 'pass'){?>
-                                            <a href="verifysaler2.php?id=<?= $row['Mid']; ?>" class="btn btn-warning">ตรวจสอบ</a>
-                                            <?php }else{?>
-                                                <?= $row['status'] ?>
-                                            <?php }?>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                        <?php }
-                        } ?>
-                    </table>
+                    $resrole = $qurrole->fetch(PDO::FETCH_ASSOC);
+
+                    ?>
+                    <h5>รหัสร้าน : <?= $resrole['Mid'] ?></h5>
+                    <h5>ชื่อร้าน : <?= $resrole['name'] ?></h5>
+                    <h5>รายละเอียดร้าน : <?= $resrole['descs'] ?></h5>
+                    <h5>โทร : <?= $resrole['tel'] ?></h5>
+                    <h5>รหัสบัตรประชาชน : <?= $resrole['idcard'] ?></h5>
+                    <img src="../assets/imgs/<?= $resrole['imgidcard'] ?>" alt="">
+                    <div class="button mt-2">
+                       <a href="verifysaler2.php?Mid=<?= $resrole['Mid']; ?>" class="btn btn-success">ยืนยันตัวตนผู้ขาย</a> 
+                       <a href="verifysaler.php?" class="btn btn-warning">กลับ</a> 
+                    </div>
+                    
                 </div>
 
             </div>

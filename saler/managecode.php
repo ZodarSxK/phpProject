@@ -24,7 +24,7 @@ if (isset($_GET['delete'])) {
 }
 $id = $_SESSION['id'];
 
-$sql = "SELECT products.pid, category.name, products.Code FROM category INNER JOIN products ON category.Cid=products.Cid WHERE products.status='' AND category.Mid = $id ";
+$sql = "SELECT products.pid, category.name, products.Code, category.cost FROM category INNER JOIN products ON category.Cid=products.Cid WHERE products.status='' AND category.Mid = $id ";
 $check_data = $conn->prepare($sql);
 $check_data->execute();
 $result = $check_data->fetchAll(PDO::FETCH_ASSOC);
@@ -41,6 +41,9 @@ $result = $check_data->fetchAll(PDO::FETCH_ASSOC);
     <meta name="author" content="" />
     <link rel="icon" type="image/x-icon" href="./assets/imgs/logo-bg.png">
     <title>Code Management</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
     <!-- Core theme CSS (includes Bootstrap)-->
     <link href="./assets/css/styles.css" rel="stylesheet" />
     <!-- IONICONS -->
@@ -102,21 +105,19 @@ $result = $check_data->fetchAll(PDO::FETCH_ASSOC);
             <div class="container-fluid ">
                 <h1 class="mt-2">Code Management</h1>
                 <!-- body -->
-                <div class="contrainer-fluid mt-3  border-top">
-
-                    <button type="button" class="btn btn-primary mt-1" data-bs-toggle="modal" data-bs-target="#addcodemodel">เพิ่มสินค้า</button>
-                    <table class="table table-sm">
+                <button type="button" class="btn btn-primary mt-1" data-bs-toggle="modal" data-bs-target="#addcodemodel">เพิ่มสินค้า</button>
+                <div class="container-fluid border-top mt-2 pt-2">
+                    <table id="myTable" class="table table-striped" style="width:100%">
                         <thead>
                             <tr>
-                                <th scope="col">ID</th>
-                                <th scope="col">ชื่อเกม</th>
-                                <th scope="col">รหัสโค้ดเกม</th>
-                                <th scope="col">ราคา</th>
-                                <th scope="col"></th>
+                                <th>ID</th>
+                                <th>ชื่อเกม</th>
+                                <th>รหัสโค้ดเกม</th>
+                                <th>ราคา</th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody>
-                            
                             <?php
                             if ($check_data->rowCount() > 0) {
                                 foreach ($result as $row) {
@@ -125,14 +126,11 @@ $result = $check_data->fetchAll(PDO::FETCH_ASSOC);
                                         <td><?= $row['pid']; ?></td>
                                         <td><?= $row['name']; ?></td>
                                         <td><?= $row['Code'] ?></td>
+                                        <td><?= $row['cost'] ?></td>
                                         <td><a href="?delete=<?= $row['pid']; ?>" class="btn btn-danger" onclick="return confirm('ต้องการที่จะลบโค้ดนี้?');">ลบ</a></td>
                                     </tr>
                             <?php }
-                            }else{
-                            ?>
-                            <?php }
-                            ?>
-                        </tbody>
+                            } ?>
                     </table>
                 </div>
             </div>
@@ -142,6 +140,13 @@ $result = $check_data->fetchAll(PDO::FETCH_ASSOC);
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Core theme JS-->
     <script src="./assets/js/scripts.js"></script>
+
+    <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+    <script>
+        new DataTable('#myTable');
+    </script>
 </body>
 
 </html>

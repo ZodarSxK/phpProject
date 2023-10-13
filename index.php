@@ -9,6 +9,8 @@ $qureypro = $conn->prepare($sql);
 $qureypro->execute();
 
 $product = $qureypro->fetchAll(PDO::FETCH_ASSOC);
+
+    
 ?>
 
 <!DOCTYPE html>

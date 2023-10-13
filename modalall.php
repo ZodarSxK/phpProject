@@ -182,15 +182,15 @@
 
 <!-- Modal Add code -->
 <?php
-    $id = $_SESSION['id'];
+$id = $_SESSION['id'];
 
-    $sql = "SELECT * FROM category WHERE Mid = :id";
-    $checkdatalist = $conn->prepare($sql);
-    $checkdatalist->bindParam(':id',$id);
-    $checkdatalist->execute();
+$sql = "SELECT * FROM category WHERE Mid = :id";
+$checkdatalist = $conn->prepare($sql);
+$checkdatalist->bindParam(':id', $id);
+$checkdatalist->execute();
 
-    $resultlist = $checkdatalist->fetchAll(PDO::FETCH_ASSOC);
-    
+$resultlist = $checkdatalist->fetchAll(PDO::FETCH_ASSOC);
+
 ?>
 <div class="modal fade" id="addcodemodel" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -204,14 +204,14 @@
                     <div class="mb-3">
 
                         <select class="form-select" aria-label="Default select example" name="Cid">
-                                <?php if ($checkdatalist->rowCount() > 0) {
-                                    foreach ($resultlist as $row) {
-                                ?>
-                                
-                                <option value="<?= $row['Cid']?>"><?= $row['name']?></option>
-                                <?php }
-                                    } ?>
-                               
+                            <?php if ($checkdatalist->rowCount() > 0) {
+                                foreach ($resultlist as $row) {
+                            ?>
+
+                                    <option value="<?= $row['Cid'] ?>"><?= $row['name'] ?></option>
+                            <?php }
+                            } ?>
+
                         </select>
                     </div>
                     <div class="mb-3">
@@ -265,3 +265,4 @@
     </div>
 </div>
 <!-- end MOdal add category -->
+

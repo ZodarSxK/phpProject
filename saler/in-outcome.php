@@ -2,6 +2,27 @@
 session_start();
 require '../DB/connect.php';
 
+if (isset($_SESSION['id'])) {
+
+    $id = $_SESSION['id'];
+    $sql = "SELECT * FROM credit WHERE Mid = $id";
+    $qur = $conn->prepare($sql);
+    $qur->execute();
+    if ($qur->rowCount() > 0) {
+        $rescredit = $qur->fetch(PDO::FETCH_ASSOC);
+    } else {
+        $rescredit = $qur->fetch(PDO::FETCH_ASSOC);
+        $rescredit['outcome'] = 0;
+    }
+
+    $qurincome = $conn->prepare("SELECT SUM(cost) income FROM ordersold WHERE Mid_sale =  $id");
+    $qurincome->execute();
+
+    $resincome = $qurincome->fetch(PDO::FETCH_ASSOC);
+} else {
+    header("location: ./");
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -14,6 +35,9 @@ require '../DB/connect.php';
     <meta name="author" content="" />
     <link rel="icon" type="image/x-icon" href="./assets/imgs/logo-bg.png">
     <title>in-outcome</title>
+    <!-- datatable -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
     <!-- Core theme CSS (includes Bootstrap)-->
     <link href="./assets/css/styles.css" rel="stylesheet" />
     <!-- IONICONS -->
@@ -54,17 +78,86 @@ require '../DB/connect.php';
                 </div>
             </nav>
             <!-- Page content-->
-            <div class="container-fluid">
+            <div class="container-fluid ">
 
                 <h1>inoutcome</h1>
+
+                <div class="contrainer-fluid mt-4  border-top">
+                    <div class="container-fluid d-flex mt-2">
+                        <div class="card me-2" style="width: 18rem;">
+                            <h5 class="card-header">รายได้ทั้งหมด</h5>
+                            <div class="card-Top ms-2 mt-2 mb-2">
+                                <h5 class="card-title"><?= $resincome['income'] ?> บาท</h5>
+                            </div>
+                        </div>
+                        <div class="card me-2" style="width: 18rem;">
+                            <h5 class="card-header">ยอดเงินที่ถอน</h5>
+                            <div class="card-Top ms-2 mt-2 mb-2">
+                                <h5 class="card-title"><?= $rescredit['outcome'] ?> บาท</h5>
+                                <!-- <a href="#" class="btn btn-primary">###</a> -->
+                            </div>
+                        </div>
+                        <div class="card me-2" style="width: 18rem;">
+                            <h5 class="card-header">ยอดเงินคงเหลือ</h5>
+                            <div class="card-Top ms-2 mt-2 mb-2">
+                                <h5 class="card-title"><?= $resincome['income'] - $rescredit['outcome'] ?> บาท</h5>
+                            </div>
+                            <div class="card-footer text-muted">
+                                <a href="#" class="btn btn-primary">ถอนเงิน</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="container-fluid border-top pt-2 mt-2">
+                        <table class="table table-striped table-hover" style="width:100%" id="myTable">
+                            <thead>
+                                <tr>
+                                    <th scope="col">รหัสสินค้า</th>
+                                    <th scope="col">ชื่อเกม</th>
+                                    <th scope="col">ราคา</th>
+                                    <th scope="col">รหัสผู้ซื้อ</th>
+                                    <th scope="col">วันที่ซื้อ</th>
+                                    <!-- <th scope="col">วันที่ซื้อ</th> -->
+                                </tr>
+                            </thead>
+                            <?php
+                            $id = $_SESSION['id'];
+                            $sqldata = "SELECT * FROM ordersold WHERE Mid_sale = $id";
+                            $qurdata = $conn->prepare($sqldata);
+                            $qurdata->execute();
+
+                            $resdata = $qurdata->fetchAll(PDO::FETCH_ASSOC);
+                            if ($qurdata->rowCount() > 0) {
+                                foreach ($resdata as $row) {
+                            ?>
+                                    <tbody>
+                                        <tr>
+                                            <td><?= $row['pid'] ?></td>
+                                            <td><?= $row['name'] ?></td>
+                                            <td><?= $row['cost'] ?></td>
+                                            <td><?= $row['Mid_buy'] ?></td>
+                                            <td><?= $row['date'] ?></td>
+                                            <!-- <td><a type="button" class="btn btn-primary" href=in-outcome.php?a=1>ลบ</a></td> -->
+                                        </tr>
+                                    </tbody>
+                            <?php }
+                            } ?>
+                        </table>
+                    </div>
+
+                    
+                </div>
 
             </div>
         </div>
     </div>
-    <!-- Bootstrap core JS-->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
-    <!-- Core theme JS-->
-    <script src="./assets/js/scripts.js"></script>
+
+    <!-- data table-->
+    <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+    <script>
+        new DataTable('#myTable');
+    </script>
 </body>
 
 </html>
