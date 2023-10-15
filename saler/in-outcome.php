@@ -19,6 +19,39 @@ if (isset($_SESSION['id'])) {
     $qurincome->execute();
 
     $resincome = $qurincome->fetch(PDO::FETCH_ASSOC);
+
+    if (isset($_POST['credit'])) {
+        $name = $_POST['namebank'];
+        $amount = $_POST['amount'];
+        $banknum = $_POST['banknum'];
+
+        if ($amount > $resincome['income']) {
+            $_SESSION['error'] = "<script>
+                                    Swal.fire({
+                                    icon: 'error',
+                                    title: 'ยอดเงินไม่เพียงพอ',
+                                    showConfirmButton: false,
+                                    timer: 2000
+                                        });                      
+                                </script>";
+            header("refresh:0.5; url=in-outcome.php");
+        } else {
+            echo "ถอนสำเร็จ";
+            $withdraw = $conn->prepare("INSERT INTO credit (Mid,namebank,banknumber,outcome,status) VALUES ($id,'$name','$banknum',$amount,'กำลังดำเนินการ')");
+            $withdraw->execute();
+            if ($withdraw) {
+                $_SESSION['success'] = "<script>
+                                        Swal.fire({
+                                        icon: 'success',
+                                        title: 'ทำรายการถอนสำเร็จ',
+                                        showConfirmButton: false,
+                                        timer: 2000
+                                            });                      
+                                    </script>";
+                                    header("refresh:0.5; url=in-outcome.php");       
+            }
+        }
+    }
 } else {
     header("location: ./");
 }
@@ -49,6 +82,23 @@ if (isset($_SESSION['id'])) {
 </head>
 
 <body>
+    <!-- session -->
+    <?php if (isset($_SESSION['success'])) { ?>
+        <?php
+        echo $_SESSION['success'];
+        unset($_SESSION['success']);
+        ?>
+    <?php } ?>
+    <?php if (isset($_SESSION['error'])) { ?>
+        <?php
+        echo $_SESSION['error'];
+        unset($_SESSION['error']);
+        ?>
+    <?php } ?>
+    <?php
+    include_once('../modalall.php');
+    ?>
+
     <div class="d-flex" id="wrapper">
         <!-- Sidebar-->
         <div class="border-end bg-white" id="sidebar-wrapper">
@@ -91,19 +141,21 @@ if (isset($_SESSION['id'])) {
                             </div>
                         </div>
                         <div class="card me-2" style="width: 18rem;">
-                            <h5 class="card-header">ยอดเงินที่ถอน</h5>
+                            <h5 class="card-header">ยอดเงินที่ถอนทั้งหมด</h5>
                             <div class="card-Top ms-2 mt-2 mb-2">
-                                <h5 class="card-title"><?= $rescredit['outcome'] ?> บาท</h5>
+                                <h5 class="card-title">ถอน: <?= $rescredit['outcome'] ?> บาท</h5>
+                                <h5 class="card-title text-success">ได้รับ: <?= ($rescredit['outcome']-((5/100)*$rescredit['outcome'])) ?> บาท</h5>
                                 <!-- <a href="#" class="btn btn-primary">###</a> -->
                             </div>
                         </div>
                         <div class="card me-2" style="width: 18rem;">
                             <h5 class="card-header">ยอดเงินคงเหลือ</h5>
                             <div class="card-Top ms-2 mt-2 mb-2">
-                                <h5 class="card-title"><?= $resincome['income'] - $rescredit['outcome'] ?> บาท</h5>
+                                <h5 class="card-title "><?= $resincome['income'] - $rescredit['outcome'] ?> บาท</h5>
                             </div>
-                            <div class="card-footer text-muted">
-                                <a href="#" class="btn btn-primary">ถอนเงิน</a>
+                            <div class="card-footer text-muted d-flex justify-content-between">
+                                <button type="button" class="btn btn-primary mt-1" data-bs-toggle="modal" data-bs-target="#credit">ถอนเงิน</button>
+                                <a href="in-outcome2.php" class="btn btn-warning mt-1">เช็คสถานะ</a>
                             </div>
                         </div>
                     </div>
@@ -144,12 +196,16 @@ if (isset($_SESSION['id'])) {
                         </table>
                     </div>
 
-                    
+
                 </div>
 
             </div>
         </div>
     </div>
+    <!-- Bootstrap core JS-->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Core theme JS-->
+    <script src="./assets/js/scripts.js"></script>
 
     <!-- data table-->
     <script src="https://code.jquery.com/jquery-3.7.0.js"></script>

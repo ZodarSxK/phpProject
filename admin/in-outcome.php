@@ -71,20 +71,32 @@ require '../DB/connect.php';
             </nav>
             <!-- Page content-->
             <div class="container-fluid mt-2">
-                <h1>verifysaler</h1>
+                <h1>withdrawal list</h1>
+                <?php $count = $conn->prepare("SELECT SUM(outcome) income FROM credit");
+                    $count->execute();
+
+                    $rescount = $count->fetch(PDO::FETCH_ASSOC);
+
+                ?>
                 <div class="container-fluid border-top pt-2 mt-3">
-                    <table class="table table-striped table-hover" style="width:100%" id="myTable">
+                    <div class="card me-2 mb-2" style="width: 18rem;">
+                        <h5 class="card-header">รายได้ทั้งหมด</h5>
+                        <div class="card-Top ms-2 mt-2 mb-2">
+                            <h5 class="card-title"><?= $rescount['income']*(5/100) ?> บาท</h5>
+                        </div>
+                    </div>
+                    <table class="table table-striped table-hover border-top" style="width:100%" id="myTable">
                         <thead>
                             <tr>
-                                <th>รหัสร้าน</th>
-                                <th>ชื่อร้าน</th>
-                                <th>รายละเอียด</th>
-                                <th>รหัสประจำตัวประชาชน</th>
+                                <th>รหัส</th>
+                                <th>รหัสผู้ถอน</th>
+                                <th>ธนาคาร</th>
+                                <th>จำนวน</th>
                                 <th></th>
                             </tr>
                         </thead>
                         <?php
-                        $qurrole = $conn->prepare("SELECT * FROM licence INNER JOIN members ON licence.Mid = members.Mid WHERE members.role = 'saler'");
+                        $qurrole = $conn->prepare("SELECT * FROM credit");
                         $qurrole->execute();
 
                         $resrole = $qurrole->fetchAll(PDO::FETCH_ASSOC);
@@ -94,15 +106,17 @@ require '../DB/connect.php';
                         ?>
                                 <tbody>
                                     <tr>
+                                        <td><?= $row['id'] ?></td>
                                         <td><?= $row['Mid'] ?></td>
-                                        <td><?= $row['name'] ?></td>
-                                        <td><?= $row['descs'] ?></td>
-                                        <td><?= $row['idcard'] ?></td>
+                                        <td><?= $row['namebank'] ?></td>
+                                        <td><?= $row['outcome'] ?></td>
                                         <td>
-                                            <?php if ($row['status'] != 'pass') { ?>
-                                                <a href="verifysaler2.php?id=<?= $row['Mid']; ?>" class="btn btn-warning">ตรวจสอบ</a>
+                                            <?php if ($row['status'] != 'สำเร็จ') { ?>
+                                                <a href="in-outcome2.php?id=<?= $row['id']; ?>" class="btn btn-warning">ทำการโอน</a>
                                             <?php } else { ?>
-                                                <h5 class="text-success"><?= $row['status'] ?></h5>
+                                                <a href="in-outcome2.php?id=<?= $row['id']; ?>" style="text-decoration: none;">
+                                                    <h5 class="text-success"><?= $row['status'] ?></h5>
+                                                </a>
                                             <?php } ?>
                                         </td>
                                     </tr>

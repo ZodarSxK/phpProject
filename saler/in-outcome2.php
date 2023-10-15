@@ -2,6 +2,31 @@
 session_start();
 require '../DB/connect.php';
 
+if (isset($_SESSION['id'])) {
+
+    if (isset($_GET['cancel'])) {
+        $cancel = $_GET['cancel'];
+
+        $sql = "DELETE FROM credit WHERE id = $cancel";
+        $delete = $conn->prepare($sql);
+        $delete->execute();
+
+        if ($delete) {
+            $_SESSION['success'] = "<script>
+                Swal.fire({
+                icon: 'success',
+                title: 'ยกเลิกการถอนเรียบร้อย',
+                showConfirmButton: false,
+                timer: 2000
+                    });                      
+            </script>";
+            header("refresh:0.5; url=in-outcome2.php");
+        }
+    }
+} else {
+    header("location: ./");
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -13,8 +38,8 @@ require '../DB/connect.php';
     <meta name="description" content="" />
     <meta name="author" content="" />
     <link rel="icon" type="image/x-icon" href="./assets/imgs/logo-bg.png">
-    <title>verifysaler</title>
-    <!-- table -->
+    <title>in-outcome</title>
+    <!-- datatable -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
     <!-- Core theme CSS (includes Bootstrap)-->
@@ -41,16 +66,20 @@ require '../DB/connect.php';
         unset($_SESSION['error']);
         ?>
     <?php } ?>
+    <?php
+    include_once('../modalall.php');
+    ?>
 
     <div class="d-flex" id="wrapper">
         <!-- Sidebar-->
         <div class="border-end bg-white" id="sidebar-wrapper">
             <div class="sidebar-heading border-bottom bg-light"><img class="ms-5" src="./assets/imgs/logo-bg.png" width="100px"></div>
             <div class="list-group list-group-flush" id="myTab">
-                <a class="list-group-item list-group-item-action list-group-item-light p-3" href="./">รายงานของเว็บไซด์</a>
-                <a class="list-group-item list-group-item-action list-group-item-light p-3" href="manageUser.php">จัดการสมาชิก</a>
-                <a class="list-group-item list-group-item-action list-group-item-light p-3" href="verifysaler.php">ยืนยันตัวตนผู้ขาย</a>
-                <a class="list-group-item list-group-item-action list-group-item-light p-3" href="in-outcome.php">รายการขอถอนเงิน</a>
+                <a class="list-group-item list-group-item-action list-group-item-light p-3" href="index.php">ข้อมูลส่วนตัว</a>
+                <a class="list-group-item list-group-item-action list-group-item-light p-3" href="addcategory.php">เพิ่มหมวดหมู่เกม</a>
+                <a class="list-group-item list-group-item-action list-group-item-light p-3" href="managecode.php">จัดการสินค้า</a>
+                <a class="list-group-item list-group-item-action list-group-item-light p-3" href="soldcode.php">สินค้าที่ขายแล้ว</a>
+                <a class="list-group-item list-group-item-action list-group-item-light p-3" href="in-outcome.php">รายได้ทั้งหมด</a>
             </div>
         </div>
         <!-- Page content wrapper-->
@@ -70,41 +99,55 @@ require '../DB/connect.php';
                 </div>
             </nav>
             <!-- Page content-->
-            <div class="container-fluid mt-2">
-                <h1>verifysaler</h1>
-                <div class="container-fluid border-top pt-2 mt-3">
+            <div class="container-fluid ">
+                <h1>inoutcome</h1>
+
+                <div class="container-fluid border-top pt-2 mt-4">
                     <table class="table table-striped table-hover" style="width:100%" id="myTable">
                         <thead>
                             <tr>
-                                <th>รหัสร้าน</th>
-                                <th>ชื่อร้าน</th>
-                                <th>รายละเอียด</th>
-                                <th>รหัสประจำตัวประชาชน</th>
-                                <th></th>
+                                <th scope="col">รหัส</th>
+                                <th scope="col">ธนาคาร</th>
+                                <th scope="col">เลขบัญชีธนาคาร</th>
+                                <th scope="col">จำนวน</th>
+                                <th scope="col">ความคืบหน้า</th>
+                                <th scope="col"></th>
                             </tr>
                         </thead>
                         <?php
-                        $qurrole = $conn->prepare("SELECT * FROM licence INNER JOIN members ON licence.Mid = members.Mid WHERE members.role = 'saler'");
-                        $qurrole->execute();
+                        $id = $_SESSION['id'];
+                        $sqldata = "SELECT * FROM credit WHERE Mid = $id";
+                        $qurdata = $conn->prepare($sqldata);
+                        $qurdata->execute();
 
-                        $resrole = $qurrole->fetchAll(PDO::FETCH_ASSOC);
-
-                        if ($qurrole->rowCount() > 0) {
-                            foreach ($resrole as $row) {
+                        $resdata = $qurdata->fetchAll(PDO::FETCH_ASSOC);
+                        if ($qurdata->rowCount() > 0) {
+                            foreach ($resdata as $row) {
                         ?>
                                 <tbody>
                                     <tr>
-                                        <td><?= $row['Mid'] ?></td>
-                                        <td><?= $row['name'] ?></td>
-                                        <td><?= $row['descs'] ?></td>
-                                        <td><?= $row['idcard'] ?></td>
-                                        <td>
-                                            <?php if ($row['status'] != 'pass') { ?>
-                                                <a href="verifysaler2.php?id=<?= $row['Mid']; ?>" class="btn btn-warning">ตรวจสอบ</a>
-                                            <?php } else { ?>
+                                        <td><?= $row['id'] ?></td>
+                                        <td><?= $row['namebank'] ?></td>
+                                        <td><?= $row['banknumber'] ?></td>
+                                        <td><?= $row['outcome'] ?></td>
+                                        <?php
+                                        if ($row['status'] != "สำเร็จ") {
+                                        ?>
+                                            <td>
+                                                <h5 class="text-warning"><?= $row['status'] ?></h5>
+                                            </td>
+
+                                            <td><a type="button" class="btn btn-danger" href=in-outcome2.php?cancel=<?= $row['id'] ?>>ยกเลิกถอน</a></td>
+                                        <?php
+                                        } else {
+                                        ?>
+                                            <td>
                                                 <h5 class="text-success"><?= $row['status'] ?></h5>
-                                            <?php } ?>
-                                        </td>
+                                            </td>
+                                            <td></td>
+                                        <?php
+                                        }
+                                        ?>
                                     </tr>
                                 </tbody>
                         <?php }
@@ -112,21 +155,26 @@ require '../DB/connect.php';
                     </table>
                 </div>
 
+
+
+
             </div>
+
         </div>
+    </div>
     </div>
     <!-- Bootstrap core JS-->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Core theme JS-->
     <script src="./assets/js/scripts.js"></script>
-    <!-- table -->
+
+    <!-- data table-->
     <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
     <script>
         new DataTable('#myTable');
     </script>
-
 </body>
 
 </html>

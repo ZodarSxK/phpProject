@@ -32,12 +32,6 @@
                         <input type="password" class="form-control" id="floatingPassword" placeholder="Password" name="password" required>
                         <label for="floatingPassword">Password</label>
                     </div>
-
-                    <div class="checkbox mb-3">
-                        <label>
-                            <input type="checkbox" value="remember-me"> Remember me
-                        </label>
-                    </div>
                     <button class="w-100 btn btn-lg btn-primary" type="submit" name="login">Login</button>
                     <div class="mt-3 text-center">
                         <span>don't have account?</span>
@@ -266,3 +260,39 @@ $resultlist = $checkdatalist->fetchAll(PDO::FETCH_ASSOC);
 </div>
 <!-- end MOdal add category -->
 
+
+<!-- MOdal credit -->
+<div class="modal fade" id="credit" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">ทำรายการถอน</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="./in-outcome.php" method="post">
+                <div class="modal-body">
+
+                    <div class="mb-3">
+                        <label for="recipient-name" class="col-form-label">ชื่อธนาคาร:</label>
+                        <input type="text" class="form-control" id="recipient-name" name="namebank" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="bank-num" class="col-form-label">เลขบัญชีธนาคาร:</label>
+                        <input type="text" class="form-control" id="bank-num" name="banknum" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="message-text" class="col-form-label">จำนวนเงินที่ต้องการถอน :</label>
+                        <input type="number" class="form-control" id="message-text" name="amount" required>
+                        <p>จำนวนเงินจะถูกหักค่าธรรมเนียมเมื่อถอน 5% จากจำนวนเงินที่ถอน</p>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">กลับ</button>
+                    <button type="submit" class="btn btn-primary" name="credit">ยืนยันการถอน</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- end MOdal credit -->

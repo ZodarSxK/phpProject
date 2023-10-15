@@ -16,6 +16,11 @@ include("./DB/connect.php"); ?>
 
 <body>
     <?php
+    include_once('modalall.php');
+    ?>
+
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo">Open modal for @mdo</button>
+    <?php
     $qurrole = $conn->prepare("SELECT * FROM members WHERE Mid = 22");
     $qurrole->execute();
     $resrole = $qurrole->fetch(PDO::FETCH_ASSOC);

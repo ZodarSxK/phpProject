@@ -28,10 +28,10 @@ require '../DB/connect.php';
             <div class="border-end bg-white" id="sidebar-wrapper">
                 <div class="sidebar-heading border-bottom bg-light"><img class="ms-5" src="./assets/imgs/logo-bg.png" width="100px" ></div>
                 <div class="list-group list-group-flush" id="myTab">
-                    <a class="list-group-item list-group-item-action list-group-item-light p-3" href="./">Dashboard</a>
-                    <a class="list-group-item list-group-item-action list-group-item-light p-3" href="manageUser.php">ManageMember</a>
-                    <a class="list-group-item list-group-item-action list-group-item-light p-3" href="verifysaler.php">Verifysaler</a>
-                    <a class="list-group-item list-group-item-action list-group-item-light p-3" href="in-outcome.php">รายได้ทั้งหมด</a>
+                    <a class="list-group-item list-group-item-action list-group-item-light p-3" href="./">รายงานของเว็บไซด์</a>
+                    <a class="list-group-item list-group-item-action list-group-item-light p-3" href="manageUser.php">จัดการสมาชิก</a>
+                    <a class="list-group-item list-group-item-action list-group-item-light p-3" href="verifysaler.php">ยืนยันตัวตนผู้ขาย</a>
+                    <a class="list-group-item list-group-item-action list-group-item-light p-3" href="in-outcome.php">รายการขอถอนเงิน</a>
                 </div>
             </div>
             <!-- Page content wrapper-->

@@ -85,7 +85,7 @@ $product = $qureypro->fetchAll(PDO::FETCH_ASSOC);
       ?>
             <div class="card m-2 p-2" style="width: 14rem; "><a href="showproduct.php?Cid=<?= $row['Cid'] ?>" style="text-decoration: none;color:black;">
 
-                <?= $row['Cid'] ?>
+                
                 <img style=" height:13rem; padding-top: 5px;" src="./assets/imgs/<?= $row['img'] ?>" class="card-img-top" alt="...">
                 <div class="card-body d-inline-block py-1 px-2 mt-1 mb-2">
                   <h5><?= $row['name'] ?></h5>

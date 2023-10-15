@@ -41,7 +41,6 @@ require '../DB/connect.php';
         unset($_SESSION['error']);
         ?>
     <?php } ?>
-
     <div class="d-flex" id="wrapper">
         <!-- Sidebar-->
         <div class="border-end bg-white" id="sidebar-wrapper">
@@ -69,63 +68,44 @@ require '../DB/connect.php';
                     </div>
                 </div>
             </nav>
-            <!-- Page content-->
             <div class="container-fluid mt-2">
-                <h1>verifysaler</h1>
+                <h1>withdrawal list</h1>
                 <div class="container-fluid border-top pt-2 mt-3">
-                    <table class="table table-striped table-hover" style="width:100%" id="myTable">
-                        <thead>
-                            <tr>
-                                <th>รหัสร้าน</th>
-                                <th>ชื่อร้าน</th>
-                                <th>รายละเอียด</th>
-                                <th>รหัสประจำตัวประชาชน</th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <?php
-                        $qurrole = $conn->prepare("SELECT * FROM licence INNER JOIN members ON licence.Mid = members.Mid WHERE members.role = 'saler'");
-                        $qurrole->execute();
+                    <?php
+                    $id = $_GET['id'];
 
-                        $resrole = $qurrole->fetchAll(PDO::FETCH_ASSOC);
+                    $qurrole = $conn->prepare("SELECT * FROM credit WHERE id = $id");
+                    $qurrole->execute();
 
-                        if ($qurrole->rowCount() > 0) {
-                            foreach ($resrole as $row) {
-                        ?>
-                                <tbody>
-                                    <tr>
-                                        <td><?= $row['Mid'] ?></td>
-                                        <td><?= $row['name'] ?></td>
-                                        <td><?= $row['descs'] ?></td>
-                                        <td><?= $row['idcard'] ?></td>
-                                        <td>
-                                            <?php if ($row['status'] != 'pass') { ?>
-                                                <a href="verifysaler2.php?id=<?= $row['Mid']; ?>" class="btn btn-warning">ตรวจสอบ</a>
-                                            <?php } else { ?>
-                                                <h5 class="text-success"><?= $row['status'] ?></h5>
-                                            <?php } ?>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                        <?php }
-                        } ?>
-                    </table>
+                    $resrole = $qurrole->fetch(PDO::FETCH_ASSOC);
+
+                    ?>
+                    <h5>รหัสผู้ถอน : <?= $resrole['Mid'] ?></h5>
+                    <h5>ธนาคาร : <?= $resrole['namebank'] ?></h5>
+                    <h5>เลขบัญชี : <?= $resrole['banknumber'] ?></h5>
+                    <h5>จำนวน : <?= $resrole['outcome']-((5/100)*$resrole['outcome']) ?> บาท</h5>
+                    <h5 class="text-success">สถานะ : <?= $resrole['status'] ?></h5>
+                    <div class="button mt-2 border-top pt-2">
+                        <a href="in-outcome2.php?withdraw=<?= $resrole['id']; ?>" class="btn btn-success">ยืนยันการโอน</a>
+                        <a href="in-outcome.php?" class="btn btn-warning">กลับ</a>
+                    </div>
+
                 </div>
 
             </div>
-        </div>
-    </div>
-    <!-- Bootstrap core JS-->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
-    <!-- Core theme JS-->
-    <script src="./assets/js/scripts.js"></script>
-    <!-- table -->
-    <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
-    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
-    <script>
-        new DataTable('#myTable');
-    </script>
+
+
+            <!-- Bootstrap core JS-->
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+            <!-- Core theme JS-->
+            <script src="./assets/js/scripts.js"></script>
+            <!-- table -->
+            <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+            <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+            <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+            <script>
+                new DataTable('#myTable');
+            </script>
 
 </body>
 
