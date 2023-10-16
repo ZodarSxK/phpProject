@@ -2,6 +2,27 @@
 session_start();
 require '../DB/connect.php';
 
+if (isset($_GET['id'])) {
+    $id = $_SESSION['id'];
+    $Mid = $_GET['id'];
+
+    
+    echo $Mid;
+    $sql ="UPDATE credit SET status ='สำเร็จ' WHERE id = $Mid";
+    $query = $conn->prepare($sql);
+    $query->execute();
+    $_SESSION['success'] = "<script>
+                  Swal.fire({
+                      icon: 'success',
+                      title: 'ยืนยันตัวตนผู้ขายเรียบร้อย',
+                      showConfirmButton: false,
+                      timer: 2000
+                            });                      
+                     </script>";
+
+    header("location: in-outcome.php");
+}
+
 ?>
 
 <!DOCTYPE html>
