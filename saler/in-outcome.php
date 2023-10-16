@@ -5,7 +5,7 @@ require '../DB/connect.php';
 if (isset($_SESSION['id'])) {
 
     $id = $_SESSION['id'];
-    $sql = "SELECT * FROM credit WHERE Mid = $id";
+    $sql = "SELECT SUM(outcome) outcome FROM credit WHERE Mid = $id";
     $qur = $conn->prepare($sql);
     $qur->execute();
     if ($qur->rowCount() > 0) {
