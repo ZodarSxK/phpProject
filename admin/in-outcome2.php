@@ -2,6 +2,27 @@
 session_start();
 require '../DB/connect.php';
 
+if (isset($_GET['id'])) {
+    $id = $_SESSION['id'];
+    $Mid = $_GET['id'];
+
+    
+    echo $Mid;
+    $sql ="UPDATE credit SET status ='สำเร็จ' WHERE id = $Mid";
+    $query = $conn->prepare($sql);
+    $query->execute();
+    $_SESSION['success'] = "<script>
+                  Swal.fire({
+                      icon: 'success',
+                      title: 'ยืนยันตัวตนผู้ขายเรียบร้อย',
+                      showConfirmButton: false,
+                      timer: 2000
+                            });                      
+                     </script>";
+
+    header("location: in-outcome.php");
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -86,7 +107,7 @@ require '../DB/connect.php';
                     <h5>จำนวน : <?= $resrole['outcome']-((5/100)*$resrole['outcome']) ?> บาท</h5>
                     <h5 class="text-success">สถานะ : <?= $resrole['status'] ?></h5>
                     <div class="button mt-2 border-top pt-2">
-                        <a href="in-outcome2.php?withdraw=<?= $resrole['id']; ?>" class="btn btn-success">ยืนยันการโอน</a>
+                        <a href="in-outcome2.php?id=<?= $resrole['id']; ?>" class="btn btn-success">ยืนยันการโอน</a>
                         <a href="in-outcome.php?" class="btn btn-warning">กลับ</a>
                     </div>
 
