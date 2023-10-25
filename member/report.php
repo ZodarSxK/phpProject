@@ -92,7 +92,7 @@ if (isset($_POST['submit'])) {
             </nav>
             <!-- Page content-->
             <div class="container-fluid">
-                <h1>report</h1>
+                <h1>แจ้งปัญหา</h1>
                 <div class="container-fluid border-top mt-4">
                     <form enctype="multipart/form-data" method="post">
                         <div class="container mb-3 mt-2">

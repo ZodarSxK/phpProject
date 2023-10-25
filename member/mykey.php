@@ -45,7 +45,6 @@ if (isset($_GET['cart'])) {
                 <a class="list-group-item list-group-item-action list-group-item-light p-3" href="index.php">ข้อมูลส่วนตัว</a>
                 <a class="list-group-item list-group-item-action list-group-item-light p-3" href="mykey.php">คีย์ของฉัน</a>
                 <a class="list-group-item list-group-item-action list-group-item-light p-3" href="history.php">รายการบัญชี</a>
-                <a class="list-group-item list-group-item-action list-group-item-light p-3" href="report.php">แจ้งปัญหา</a>
             </div>
         </div>
         <!-- Page content wrapper-->

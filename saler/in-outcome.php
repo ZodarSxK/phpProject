@@ -130,28 +130,28 @@ if (isset($_SESSION['id'])) {
             <!-- Page content-->
             <div class="container-fluid ">
 
-                <h1>inoutcome</h1>
+                <h1>รายได้ทั้งหมด</h1>
 
                 <div class="contrainer-fluid mt-4  border-top">
                     <div class="container-fluid d-flex mt-2">
                         <div class="card me-2" style="width: 18rem;">
                             <h5 class="card-header">รายได้ทั้งหมด</h5>
                             <div class="card-Top ms-2 mt-2 mb-2">
-                                <h5 class="card-title"><?= $resincome['income'] ?> บาท</h5>
+                                <h5 class="card-title ps-2"><?= $resincome['income'] ?> บาท</h5>
                             </div>
                         </div>
                         <div class="card me-2" style="width: 18rem;">
                             <h5 class="card-header">ยอดเงินที่ถอนทั้งหมด</h5>
                             <div class="card-Top ms-2 mt-2 mb-2">
-                                <h5 class="card-title">ถอน: <?= $rescredit['outcome'] ?> บาท</h5>
-                                <h5 class="card-title text-success">ได้รับ: <?= ($rescredit['outcome']-((5/100)*$rescredit['outcome'])) ?> บาท</h5>
+                                <h5 class="card-title ps-2">ถอน: <?= $rescredit['outcome'] ?> บาท</h5>
+                                <h5 class="card-title text-success ps-2">ได้รับ: <?= ($rescredit['outcome']-((5/100)*$rescredit['outcome'])) ?> บาท</h5>
                                 <!-- <a href="#" class="btn btn-primary">###</a> -->
                             </div>
                         </div>
                         <div class="card me-2" style="width: 18rem;">
                             <h5 class="card-header">ยอดเงินคงเหลือ</h5>
                             <div class="card-Top ms-2 mt-2 mb-2">
-                                <h5 class="card-title "><?= $resincome['income'] - $rescredit['outcome'] ?> บาท</h5>
+                                <h5 class="card-title ps-2"><?= $resincome['income'] - $rescredit['outcome'] ?> บาท</h5>
                             </div>
                             <div class="card-footer text-muted d-flex justify-content-between">
                                 <button type="button" class="btn btn-primary mt-1" data-bs-toggle="modal" data-bs-target="#credit">ถอนเงิน</button>

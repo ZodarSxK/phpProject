@@ -37,7 +37,6 @@ $id = $_SESSION['id'];
                 <a class="list-group-item list-group-item-action list-group-item-light p-3" href="index.php">ข้อมูลส่วนตัว</a>
                 <a class="list-group-item list-group-item-action list-group-item-light p-3" href="mykey.php">คีย์ของฉัน</a>
                 <a class="list-group-item list-group-item-action list-group-item-light p-3" href="history.php">รายการบัญชี</a>
-                <a class="list-group-item list-group-item-action list-group-item-light p-3" href="report.php">แจ้งปัญหา</a>
             </div>
         </div>
         <!-- Page content wrapper-->
@@ -58,7 +57,7 @@ $id = $_SESSION['id'];
             </nav>
             <!-- Page content-->
             <div class="container-fluid">
-                <h1>history</h1>
+                <h1>รายการบัญชี</h1>
                 <div class="contrainer-fluid mt-4  border-top">
                     <div class="container-fluid d-flex mt-2">
                         <div class="card me-2" style="width: 18rem;">
@@ -73,7 +72,7 @@ $id = $_SESSION['id'];
 
                             <h5 class="card-header">ยอดเงินที่ซื้อทั้งหมด</h5>
                             <div class="card-Top ms-2 mt-2 mb-2">
-                                <h5 class="card-title"><?= $rescount['cost'] ?> บาท</h5>
+                                <h5 class="card-title ps-2"><?= $rescount['cost'] ?> บาท</h5>
                             </div>
                         </div>
                     </div>

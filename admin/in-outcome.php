@@ -6,9 +6,9 @@ if (isset($_GET['id'])) {
     $id = $_SESSION['id'];
     $Mid = $_GET['id'];
 
-    
+
     echo $Mid;
-    $sql ="UPDATE credit SET status ='สำเร็จ' WHERE id = $Mid";
+    $sql = "UPDATE credit SET status ='สำเร็จ' WHERE id = $Mid";
     $query = $conn->prepare($sql);
     $query->execute();
     $_SESSION['success'] = "<script>
@@ -68,8 +68,7 @@ if (isset($_GET['id'])) {
         <div class="border-end bg-white" id="sidebar-wrapper">
             <div class="sidebar-heading border-bottom bg-light"><img class="ms-5" src="./assets/imgs/logo-bg.png" width="100px"></div>
             <div class="list-group list-group-flush" id="myTab">
-                <a class="list-group-item list-group-item-action list-group-item-light p-3" href="./">รายงานของเว็บไซด์</a>
-                <a class="list-group-item list-group-item-action list-group-item-light p-3" href="manageUser.php">จัดการสมาชิก</a>
+                <a class="list-group-item list-group-item-action list-group-item-light p-3" href="./">จัดการสมาชิก</a>
                 <a class="list-group-item list-group-item-action list-group-item-light p-3" href="verifysaler.php">ยืนยันตัวตนผู้ขาย</a>
                 <a class="list-group-item list-group-item-action list-group-item-light p-3" href="in-outcome.php">รายการขอถอนเงิน</a>
             </div>
@@ -92,18 +91,20 @@ if (isset($_GET['id'])) {
             </nav>
             <!-- Page content-->
             <div class="container-fluid mt-2">
-                <h1>withdrawal list</h1>
+                <div class="container-fluid d-flex justify-content-between">
+                    <h1>รายการขอถอนเงิน</h1>
+                </div>
                 <?php $count = $conn->prepare("SELECT SUM(outcome) income FROM credit");
-                    $count->execute();
+                $count->execute();
 
-                    $rescount = $count->fetch(PDO::FETCH_ASSOC);
+                $rescount = $count->fetch(PDO::FETCH_ASSOC);
 
                 ?>
                 <div class="container-fluid border-top pt-2 mt-3">
                     <div class="card me-2 mb-2" style="width: 18rem;">
-                        <h5 class="card-header">รายได้ทั้งหมด</h5>
+                        <h5 class="card-header">รายได้ทั้งหมด <ion-icon name="cash-outline"></ion-icon></h5>
                         <div class="card-Top ms-2 mt-2 mb-2">
-                            <h5 class="card-title"><?= $rescount['income']*(5/100) ?> บาท</h5>
+                            <h5 class="card-title ps-2"><?= $rescount['income'] * (5 / 100) ?> บาท</h5>
                         </div>
                     </div>
                     <table class="table table-striped table-hover border-top" style="width:100%" id="myTable">
@@ -113,7 +114,8 @@ if (isset($_GET['id'])) {
                                 <th>รหัสผู้ถอน</th>
                                 <th>ธนาคาร</th>
                                 <th>จำนวน</th>
-                                <th></th>
+                                <th>สถานะ</th>
+                                <th>วันที่</th>
                             </tr>
                         </thead>
                         <?php
@@ -140,6 +142,7 @@ if (isset($_GET['id'])) {
                                                 </a>
                                             <?php } ?>
                                         </td>
+                                        <td><?= $row['date'] ?></td>
                                     </tr>
                                 </tbody>
                         <?php }

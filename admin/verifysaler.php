@@ -47,8 +47,7 @@ require '../DB/connect.php';
         <div class="border-end bg-white" id="sidebar-wrapper">
             <div class="sidebar-heading border-bottom bg-light"><img class="ms-5" src="./assets/imgs/logo-bg.png" width="100px"></div>
             <div class="list-group list-group-flush" id="myTab">
-                <a class="list-group-item list-group-item-action list-group-item-light p-3" href="./">รายงานของเว็บไซด์</a>
-                <a class="list-group-item list-group-item-action list-group-item-light p-3" href="manageUser.php">จัดการสมาชิก</a>
+                <a class="list-group-item list-group-item-action list-group-item-light p-3" href="./">จัดการสมาชิก</a>
                 <a class="list-group-item list-group-item-action list-group-item-light p-3" href="verifysaler.php">ยืนยันตัวตนผู้ขาย</a>
                 <a class="list-group-item list-group-item-action list-group-item-light p-3" href="in-outcome.php">รายการขอถอนเงิน</a>
             </div>
@@ -71,7 +70,7 @@ require '../DB/connect.php';
             </nav>
             <!-- Page content-->
             <div class="container-fluid mt-2">
-                <h1>verifysaler</h1>
+                <h1>ยืนยันตัวตนผู้ขาย</h1>
                 <div class="container-fluid border-top pt-2 mt-3">
                     <table class="table table-striped table-hover" style="width:100%" id="myTable">
                         <thead>

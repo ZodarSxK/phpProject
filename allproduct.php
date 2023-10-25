@@ -39,13 +39,11 @@ if (isset($_GET['namegame'])) {
     unset($_SESSION['A']);
     ?>
     <div class="container">
-        <div class="row">
-            <div class="col mt-3">
-                <form>
-                    <input type="text" name="namegame">
-                    <button type="submit" name="search">ค้นหา</button>
-                </form>
-            </div>
+        <div class="btn-group mt-3" role="group" aria-label="Basic example">
+            <form class="d-flex">
+                <input type="text" class="form-control" name="namegame">
+                <button type="submit" class="btn btn-light">ค้นหา</button>
+            </form>
         </div>
         <div class="row">
             <?php if ($qureypro->rowCount() > 0) {
@@ -62,11 +60,17 @@ if (isset($_GET['namegame'])) {
             ?>
                         <div class="card m-2 p-2" style="width: 14rem; "><a href="showproduct.php?Cid=<?= $row['Cid'] ?>" style="text-decoration: none;color:black;">
 
-                                <?= $row['Cid'] ?>
-                                <?= $res['count'] ?>
+
                                 <img style=" height:13rem; padding-top: 5px;" src="./assets/imgs/<?= $row['img'] ?>" class="card-img-top" alt="...">
-                                <div class="card-body d-inline-block py-1 px-2 mt-1 mb-2">
-                                    <h5><?= $row['name'] ?></h5>
+                                <div class="card-body d-inline-block py-1 px-2 mt-1 w-100">
+                                    <?php
+                                    $product_name = $row['name'];
+                                    if (strlen($product_name) > 15) {
+                                        $product_name = mb_substr($product_name, 0, 13) . '...';
+                                    }
+                                    
+                                    ?>
+                                    <h5><?= $product_name ?></h5>
                                     <p>ราคา <?= $row['cost'] ?> บาท</p>
                                 </div>
                                 <div>
@@ -77,6 +81,7 @@ if (isset($_GET['namegame'])) {
                                         <button type="submit" name="buy" class="btn btn-success">ซื้อ</button>
                                     </form>
                                 </div>
+                                
                             </a>
                         </div>
 
@@ -87,7 +92,30 @@ if (isset($_GET['namegame'])) {
         </div>
 
     </div>
+    <div class="container">
+        <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
+            <div class="col-md-4 d-flex align-items-center">
+                <a href="/" class="mb-3 me-2 mb-md-0 text-body-secondary text-decoration-none lh-1">
+                    <svg class="bi" width="30" height="24">
+                        <use xlink:href="#bootstrap"></use>
+                    </svg>
+                </a>
+                <span class="mb-3 mb-md-0 text-body-secondary">© 2023 Company, Inc</span>
+            </div>
 
+            <ul class="nav col-md-4 justify-content-end list-unstyled d-flex">
+                <li class="ms-3"><a class="text-body-secondary" href="#"><svg class="bi" width="24" height="24">
+                            <use xlink:href="#twitter"></use>
+                        </svg></a></li>
+                <li class="ms-3"><a class="text-body-secondary" href="#"><svg class="bi" width="24" height="24">
+                            <use xlink:href="#instagram"></use>
+                        </svg></a></li>
+                <li class="ms-3"><a class="text-body-secondary" href="#"><svg class="bi" width="24" height="24">
+                            <use xlink:href="#facebook"></use>
+                        </svg></a></li>
+            </ul>
+        </footer>
+    </div>
 </body>
 
 </html>

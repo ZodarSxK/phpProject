@@ -47,8 +47,7 @@ require '../DB/connect.php';
         <div class="border-end bg-white" id="sidebar-wrapper">
             <div class="sidebar-heading border-bottom bg-light"><img class="ms-5" src="./assets/imgs/logo-bg.png" width="100px"></div>
             <div class="list-group list-group-flush" id="myTab">
-                <a class="list-group-item list-group-item-action list-group-item-light p-3" href="./">รายงานของเว็บไซด์</a>
-                <a class="list-group-item list-group-item-action list-group-item-light p-3" href="manageUser.php">จัดการสมาชิก</a>
+                <a class="list-group-item list-group-item-action list-group-item-light p-3" href="./">จัดการสมาชิก</a>
                 <a class="list-group-item list-group-item-action list-group-item-light p-3" href="verifysaler.php">ยืนยันตัวตนผู้ขาย</a>
                 <a class="list-group-item list-group-item-action list-group-item-light p-3" href="in-outcome.php">รายการขอถอนเงิน</a>
             </div>
@@ -84,7 +83,7 @@ require '../DB/connect.php';
                     <h5>รหัสผู้ถอน : <?= $resrole['Mid'] ?></h5>
                     <h5>ธนาคาร : <?= $resrole['namebank'] ?></h5>
                     <h5>เลขบัญชี : <?= $resrole['banknumber'] ?></h5>
-                    <h5>จำนวน : <?= $resrole['outcome']-((5/100)*$resrole['outcome']) ?> บาท</h5>
+                    <h5>จำนวน : <?= $resrole['outcome'] - ((5 / 100) * $resrole['outcome']) ?> บาท</h5>
                     <h5 class="text-success">สถานะ : <?= $resrole['status'] ?></h5>
                     <div class="button mt-2 border-top pt-2">
                         <a href="in-outcome.php?id=<?= $resrole['id']; ?>" class="btn btn-success">ยืนยันการโอน</a>

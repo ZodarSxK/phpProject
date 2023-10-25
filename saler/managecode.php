@@ -103,7 +103,7 @@ $result = $check_data->fetchAll(PDO::FETCH_ASSOC);
             </nav>
             <!-- Page content-->
             <div class="container-fluid ">
-                <h1 class="mt-2">Code Management</h1>
+                <h1 class="mt-2">จัดการสินค้า</h1>
                 <!-- body -->
                 <button type="button" class="btn btn-primary mt-1" data-bs-toggle="modal" data-bs-target="#addcodemodel">เพิ่มสินค้า</button>
                 <div class="container-fluid border-top mt-2 pt-2">

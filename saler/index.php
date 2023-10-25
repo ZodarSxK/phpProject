@@ -75,7 +75,7 @@ $result = $qurey->fetch(PDO::FETCH_ASSOC);
                 </nav>
                 <!-- Page content-->
                 <div class="container-fluid mt-2">
-                        <h1 class="mb-3">info</h1>                        
+                        <h1 class="mb-3">ข้อมูลส่วนตัว</h1>                        
                         <form action="./editinfo.php" method="post" enctype="multipart/form-data" class="border-top">
                             <div class="container-fluid d-flex justify-content-center mt-2">
                                 <?php if(isset($result['profile'])){?>

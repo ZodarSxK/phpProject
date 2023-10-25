@@ -10,7 +10,7 @@ $qureypro->execute();
 
 $product = $qureypro->fetchAll(PDO::FETCH_ASSOC);
 
-    
+
 ?>
 
 <!DOCTYPE html>
@@ -19,7 +19,7 @@ $product = $qureypro->fetchAll(PDO::FETCH_ASSOC);
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="./assets/css/style_index.css">
+  <!-- <link rel="stylesheet" href="./assets/css/style_index.css"> -->
   <title>HOMEPAGE</title>
   <style>
     .carousel-item img {
@@ -30,16 +30,23 @@ $product = $qureypro->fetchAll(PDO::FETCH_ASSOC);
 </head>
 
 <body>
-
   <?php include("nav.php"); ?>
-  <?php
-  echo $_SESSION['error'];
-  unset($_SESSION['error']);
-  ?>
+  <?php if (isset($_SESSION['error'])) { ?>
+    <?php
+    echo $_SESSION['error'];
+    unset($_SESSION['error']);
+    ?>
+  <?php } ?>
   <?php if (isset($_SESSION['success'])) { ?>
     <?php
     echo $_SESSION['success'];
     unset($_SESSION['success']);
+    ?>
+  <?php } ?>
+  <?php if (isset($_SESSION['A'])) { ?>
+    <?php
+    echo $_SESSION['A'];
+    unset($_SESSION['A']);
     ?>
   <?php } ?>
   <div class="carousel">
@@ -51,9 +58,9 @@ $product = $qureypro->fetchAll(PDO::FETCH_ASSOC);
         <div class="carousel-item">
           <img src="./assets/imgs/Gaming.jpg" class="d-block w-100" alt="...">
         </div>
-        <div class="carousel-item">
+        <!-- <div class="carousel-item">
           <img src="./assets/imgs/janD.jpg" class="d-block w-100" alt="...">
-        </div>
+        </div> -->
       </div>
       <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -66,11 +73,7 @@ $product = $qureypro->fetchAll(PDO::FETCH_ASSOC);
     </div>
   </div>
   <!-- ///////////////////////////////////////////////////////////////////////////////////// -->
-  <?php
-  echo $_SESSION['A'];
-  unset($_SESSION['A']);
-  ?>
-  <div class="container-fluid border-top" style="padding-left: 5rem;">
+  <div class="container border-top" style="padding-left: 5rem;">
     <div class="row">
       <?php if ($qureypro->rowCount() > 0) {
         $i = 0;
@@ -85,10 +88,17 @@ $product = $qureypro->fetchAll(PDO::FETCH_ASSOC);
       ?>
             <div class="card m-2 p-2" style="width: 14rem; "><a href="showproduct.php?Cid=<?= $row['Cid'] ?>" style="text-decoration: none;color:black;">
 
-                
+
                 <img style=" height:13rem; padding-top: 5px;" src="./assets/imgs/<?= $row['img'] ?>" class="card-img-top" alt="...">
-                <div class="card-body d-inline-block py-1 px-2 mt-1 mb-2">
-                  <h5><?= $row['name'] ?></h5>
+                <div class="card-body d-inline-block py-1 px-2 mt-1">
+                  <?php
+                  $product_name = $row['name'];
+                  if (strlen($product_name) > 15) {
+                    $product_name = mb_substr($product_name, 0, 13) . '...';
+                  }
+
+                  ?>
+                  <h5><?= $product_name ?></h5>
                   <p>ราคา <?= $row['cost'] ?> บาท</p>
                 </div>
                 <div>
@@ -103,7 +113,7 @@ $product = $qureypro->fetchAll(PDO::FETCH_ASSOC);
             </div>
       <?php
           }
-          if ($i == 5) {
+          if ($i == 9) {
             exit();
           }
           $i++;
@@ -111,8 +121,6 @@ $product = $qureypro->fetchAll(PDO::FETCH_ASSOC);
       } ?>
     </div>
   </div>
-</body>
-
 </body>
 
 </html>

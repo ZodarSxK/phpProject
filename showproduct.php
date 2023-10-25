@@ -1,4 +1,5 @@
 <?php
+error_reporting(E_ERROR | E_PARSE);
 session_start();
 include("./DB/connect.php");
 
@@ -24,12 +25,12 @@ $rs = $query->fetch(PDO::FETCH_ASSOC);
 </head>
 
 <body>
-    <div class="container px-4 px-lg-5 my-5">
-        <div class="row d-flex gx-4 gx-lg-5 align-items-center">
-            <div class="col-md-6 d-flex justify-content-center">
+    <div class="container d-flex px-4 px-lg-5 my-5">
+        
+            <div class="col-md-6 d-flex justify-content-end  pe-3">
                 <img src="./assets/imgs/<?= $rs['img'] ?>" alt="" style="width: 13rem;">
             </div>
-            <div class="col-md-6 ">
+            <div class="col-md-6 pe-5">
                 <h1 class="display-6 fw-bolder"><?= $rs['name'] ?></h1>
                 <div class="fs-5 mb-5">
                     <span>ราคา <?= $rs['cost'] ?> บาท</span>
@@ -43,8 +44,7 @@ $rs = $query->fetch(PDO::FETCH_ASSOC);
                 </form>
 
             </div>
-
-        </div>
+        
     </div>
 
 </body>

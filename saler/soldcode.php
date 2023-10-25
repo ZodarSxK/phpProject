@@ -65,7 +65,7 @@ $result = $qurey->fetchAll(PDO::FETCH_ASSOC);
             <div class="container-fluid ">
                 <h1 class="mt-2">สินค้าที่ขายแล้ว</h1>
                 <!-- body -->
-                <div class="contrainer-fluid mt-3  border-top">
+                <div class="contrainer-fluid mt-3  border-top pt-2">
                 <table class="table table-striped table-hover" style="width:100%" id="myTable">
                         <thead>
                             <tr>

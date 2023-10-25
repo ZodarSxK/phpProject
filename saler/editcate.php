@@ -2,35 +2,30 @@
 session_start();
 require '../DB/connect.php';
 
-$id = $_SESSION['id'];
+$cid = $_GET['id'];
+$showcate = $conn->prepare("SELECT * FROM category WHERE Cid = $cid");
+$showcate->execute();
 
-$sql = "SELECT * FROM category WHERE Mid = :id";
-$qurey = $conn->prepare($sql);
-$qurey->bindParam(':id', $id);
-$qurey->execute();
+$query = $showcate->fetch(PDO::FETCH_ASSOC);
 
-$result = $qurey->fetchAll(PDO::FETCH_ASSOC);
+if(isset($_POST['editcate'])){
+    $name = $_POST['name'];
+    $cost = $_POST['cost'];
 
-if (isset($_GET['delete'])) {
-    $id = $_GET['delete'];
+    $editcate = $conn->prepare("UPDATE category SET name = '$name' , cost = $cost WHERE Cid = $cid");
+    $editcate->execute();
 
-    $sql = "DELETE FROM category WHERE Cid = :id";
-    $delete = $conn->prepare($sql);
-    $delete->bindParam(':id', $id);
-    $delete->execute();
-
-    if ($delete) {
+    if($editcate){
         $_SESSION['success'] = "<script>
-                Swal.fire({
-                icon: 'success',
-                title: 'ลบเกมเรียบร้อย',
-                showConfirmButton: false,
-                timer: 2000
-                    });                      
-            </script>";
-        header("refresh:0.5; url=addcategory.php");
+                  Swal.fire({
+                      icon: 'success',
+                      title: 'แก้ไขข้อมูลเรียบร้อย',
+                      showConfirmButton: false,
+                      timer: 2000
+                            });                      
+                     </script>";
+              header("location: ./addcategory.php");
     }
-    
 }
 
 
@@ -57,28 +52,7 @@ if (isset($_GET['delete'])) {
 </head>
 
 <body>
-    <!-- session -->
-    <?php if (isset($_SESSION['success'])) { ?>
-        <?php
-        echo $_SESSION['success'];
-        unset($_SESSION['success']);
-        ?>
-    <?php } ?>
-    <?php if (isset($_SESSION['error'])) { ?>
-        <?php
-        echo $_SESSION['error'];
-        unset($_SESSION['error']);
-        ?>
-    <?php } ?>
-    <?php if (isset($_SESSION['confirm'])) { ?>
-        <?php
-        echo $_SESSION['confirm'];
-        unset($_SESSION['confirm']);
-        ?>
-    <?php } ?>
-    <?php
-    include('../modalall.php');
-    ?>
+ 
     <div class="d-flex" id="wrapper">
         <!-- Sidebar-->
         <div class="border-end bg-white" id="sidebar-wrapper">
@@ -108,33 +82,28 @@ if (isset($_GET['delete'])) {
                 </div>
             </nav>
             <!-- Page content-->
-            <div class="container-fluid mt-2">
-                <h1 class="mb-3">เพิ่มหมวดหมู่เกม</h1>
-                <button type="button" class="btn btn-primary mt-1 " data-bs-toggle="modal" data-bs-target="#addcategory">เพิ่มเกม</button>
-
-                <div class="row">
-                    <?php if ($qurey->rowCount() > 0) {
-                        foreach ($result as $row) {
-                            $cid = $row['Cid'];
-                            $qur = $conn->prepare("SELECT COUNT(cid) count FROM products WHERE cid=$cid AND status=''");
-                            $qur->execute();
-
-                            $res = $qur->fetch(PDO::FETCH_ASSOC);
-                    ?>
-
-                            <div class="card m-2 p-2" style="width: 14rem; ">
-                                <img style=" height:13rem; padding-top: 5px;" src="../assets/imgs/<?= $row['img'] ?>" class="card-img-top" alt="...">
-                                <div class="card-body d-inline-block py-1 px-2 mt-1 mb-2">
-                                    
-                                    <h5><?= $row['name'] ?></h5>
-                                    <h6>ราคา <?= $row['cost'] ?> บาท</h6>
-                                    <p>คงเหลือ : <?= $res['count'] ?></p>
-                                    <td><a href="editcate.php?id=<?= $row['Cid'];?>" class="btn btn-primary">แก้ไขราคา</a></td>
-                                    <td><a href="?delete=<?= $row['Cid']; ?>" class="btn btn-danger" onclick="return confirm('ต้องการที่จะลบเกมนี้? เกมที่ยังคงเหลือจะถูกลบไปด้วย');">ลบ</a></td>
-                                </div>
+            <div class="container-fluid mt-3">
+                <h1 class="mb-2">เพิ่มหมวดหมู่เกม</h1>
+                <div class="row border-top">
+                    <div class="col-md-6">
+                        <form method="post" enctype="multipart/form-data">
+                            <div class="mb-3">
+                                <img src="../assets/imgs/<?= $query['img'] ?>" width="300">
                             </div>
-                    <?php }
-                    } ?>
+                            <div class="mb-3">
+                                <label for="name" class="form-label">ชื่อเกม</label>
+                                <input type="text" class="form-control" name="name" value="<?= $query['name'] ?>" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="cost" class="form-label">ราคา</label>
+                                <input type="text" class="form-control" name="cost" value="<?= $query['cost'] ?>" required>
+                            </div>
+                            <div class="modal-footer">
+                                <a href="./addcategory.php" class="btn btn-secondary me-1">ยกเลิก</a>
+                                <button type="submit" class="btn btn-primary" name="editcate">บันทึก</button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
 
             </div>
