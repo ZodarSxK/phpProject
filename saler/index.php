@@ -90,7 +90,7 @@ $result = $qurey->fetch(PDO::FETCH_ASSOC);
                     </div>
                     <div class="container-fluid d-flex justify-content-center mt-2">
                     <?php
-                    if ($result['status'] == 'pass') {
+                    if ($result['status'] == 'สำเร็จ') {
                     ?>
                         <span class="text-success">ได้รับการยืนยันผู้ขายแล้ว <ion-icon name="medal-sharp"></ion-icon></span>
                     <?php

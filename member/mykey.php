@@ -4,7 +4,7 @@ require '../DB/connect.php';
 
 $id = $_SESSION['id'];
 
-$sql = "SELECT products.pid, category.name, products.Code FROM category INNER JOIN products ON category.Cid=products.Cid WHERE products.owner=$id ";
+$sql = "SELECT products.pid, category.name, products.Code ,products.pdate FROM category INNER JOIN products ON category.Cid=products.Cid WHERE products.owner=$id ";
 $query = $conn->prepare($sql);
 $query->execute();
 $result = $query->fetchAll(PDO::FETCH_ASSOC);
@@ -74,6 +74,7 @@ if (isset($_GET['cart'])) {
                                 <th scope="col">ID</th>
                                 <th scope="col">ชื่อเกม</th>
                                 <th scope="col">รหัสโค้ดเกม</th>
+                                <th scope="col">วันที่</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -86,6 +87,7 @@ if (isset($_GET['cart'])) {
                                         <td><?= $row['pid']; ?></td>
                                         <td><?= $row['name']; ?></td>
                                         <td><?= $row['Code'] ?></td>
+                                        <td><?= $row['pdate'] ?></td>
                                     </tr>
                             <?php }
                             }

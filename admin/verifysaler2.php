@@ -8,7 +8,7 @@ if (isset($_GET['Mid'])) {
 
     echo "ยืนยัน";
 
-    $sql = "UPDATE licence SET Mid_ver = $id, status ='pass' WHERE Mid = $Mid";
+    $sql = "UPDATE licence SET Mid_ver = $id, status ='สำเร็จ' WHERE Mid = $Mid";
     $query = $conn->prepare($sql);
     $query->execute();
     $_SESSION['success'] = "<script>

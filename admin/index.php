@@ -43,7 +43,7 @@ if (isset($_GET['delete'])) {
               });                      
        </script>";
 
-        header("refresh:1; url=manageUser.php");
+        header("refresh:1; ./");
     }
 }
 

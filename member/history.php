@@ -3,6 +3,55 @@ session_start();
 require '../DB/connect.php';
 
 $id = $_SESSION['id'];
+
+if (isset($_SESSION['id'])) {
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
+        $id = $_SESSION['id'];
+        $date = $_POST["date"];
+
+        if ($date == 'D') {
+            $sql = "SELECT pid,SUM(cost) cost,name,DATE_FORMAT(date, '%d-%m-%Y') date FROM ordersold WHERE Mid_buy = $id GROUP BY DATE_FORMAT(date, '%d%') ORDER BY DATE_FORMAT(date, '%Y-%m-%d') ASC";
+        } else if ($date == 'M') {
+            $sql = "SELECT pid,SUM(cost) cost,name,DATE_FORMAT(date, '%m-%Y') date FROM ordersold WHERE Mid_buy = $id GROUP BY DATE_FORMAT(date, '%m%') ORDER BY DATE_FORMAT(date, '%Y-%m-%d') ASC";
+        } else if ($date == 'Y') {
+            $sql = "SELECT pid,SUM(cost) cost,name,DATE_FORMAT(date, '%Y') date FROM ordersold WHERE Mid_buy = $id GROUP BY DATE_FORMAT(date, '%Y%') ORDER BY DATE_FORMAT(date, '%Y-%m-%d') ASC";
+        } else {
+            $sql = "SELECT pid,cost,name,DATE_FORMAT(date, '%d-%m-%Y') date FROM ordersold WHERE Mid_buy = $id ORDER BY DATE_FORMAT(date, '%Y-%m-%d') ASC";
+        }
+
+        // $sqldata = "SELECT * FROM ordersold WHERE Mid_buy = $id";
+        // $qurdata = $conn->prepare($sqldata);
+        // $qurdata->execute();
+
+        // $resdata = $qurdata->fetchAll(PDO::FETCH_ASSOC);
+
+        $qurdata = $conn->prepare($sql);
+        $qurdata->execute();
+        $resdata = $qurdata->fetchAll(PDO::FETCH_ASSOC);
+
+        $sqlcount = "SELECT SUM(cost) cost FROM ordersold WHERE Mid_buy = $id";
+        $qurcount = $conn->prepare($sqlcount);
+        $qurcount->execute();
+
+        $rescount = $qurcount->fetch(PDO::FETCH_ASSOC);
+    } else {
+
+        $qurdata = $conn->prepare("SELECT pid,cost,name,DATE_FORMAT(date, '%d-%m-%Y') date FROM ordersold WHERE Mid_buy = $id ORDER BY DATE_FORMAT(date, '%Y-%m-%d') ASC");
+        $qurdata->execute();
+        $resdata = $qurdata->fetchAll(PDO::FETCH_ASSOC);
+
+
+        $sqlcount = "SELECT SUM(cost) cost FROM ordersold WHERE Mid_buy = $id";
+        $qurcount = $conn->prepare($sqlcount);
+        $qurcount->execute();
+
+        $rescount = $qurcount->fetch(PDO::FETCH_ASSOC);
+    }
+} else {
+    header("location: ./");
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -57,19 +106,22 @@ $id = $_SESSION['id'];
             </nav>
             <!-- Page content-->
             <div class="container-fluid">
-                <h1>รายการบัญชี</h1>
+                <div class="container-fluid d-flex justify-content-between">
+                    <h1>รายการบัญชี</h1>
+                    <form method="post" class="mt-3">
+                        <label for="date">ดูรายงานประจำ ว/ด/ป :</label>
+                        <select id="date" name="date">
+                            <option value="All">ทั้งหมด</option>
+                            <option value="D">วัน</option>
+                            <option value="M">เดือน</option>
+                            <option value="Y">ปี</option>
+                        </select>
+                        <button type="submit" class="btn btn-primary">ดู</button>
+                    </form>
+                </div>
                 <div class="contrainer-fluid mt-4  border-top">
                     <div class="container-fluid d-flex mt-2">
                         <div class="card me-2" style="width: 18rem;">
-                            <?php
-                            $sqlcount = "SELECT SUM(cost) cost FROM ordersold WHERE Mid_buy = $id";
-                            $qurcount = $conn->prepare($sqlcount);
-                            $qurcount->execute();
-
-                            $rescount = $qurcount->fetch(PDO::FETCH_ASSOC);
-
-                            ?>
-
                             <h5 class="card-header">ยอดเงินที่ซื้อทั้งหมด</h5>
                             <div class="card-Top ms-2 mt-2 mb-2">
                                 <h5 class="card-title ps-2"><?= $rescount['cost'] ?> บาท</h5>
@@ -81,30 +133,20 @@ $id = $_SESSION['id'];
                             <thead>
                                 <tr>
                                     <th scope="col">รหัสสินค้า</th>
-                                    <th scope="col">ชื่อเกม</th>
                                     <th scope="col">ราคา</th>
-                                    <th scope="col">รหัสผู้ซื้อ</th>
                                     <th scope="col">วันที่ซื้อ</th>
                                     <!-- <th scope="col">วันที่ซื้อ</th> -->
                                 </tr>
                             </thead>
                             <?php
-
-                            $id = $_SESSION['id'];
-                            $sqldata = "SELECT * FROM ordersold WHERE Mid_buy = $id";
-                            $qurdata = $conn->prepare($sqldata);
-                            $qurdata->execute();
-
-                            $resdata = $qurdata->fetchAll(PDO::FETCH_ASSOC);
+                
                             if ($qurdata->rowCount() > 0) {
                                 foreach ($resdata as $row) {
                             ?>
                                     <tbody>
                                         <tr>
                                             <td><?= $row['pid'] ?></td>
-                                            <td><?= $row['name'] ?></td>
                                             <td><?= $row['cost'] ?></td>
-                                            <td><?= $row['Mid_buy'] ?></td>
                                             <td><?= $row['date'] ?></td>
                                             <!-- <td><a type="button" class="btn btn-primary" href=in-outcome.php?a=1>ลบ</a></td> -->
                                         </tr>

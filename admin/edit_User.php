@@ -57,10 +57,10 @@ require '../DB/connect.php';
                       timer: 2000
                             });                      
                      </script>";
-              header("location: ./manageUser.php");
+              header("location: ./");
        }else{
               $_SESSION['error'] = "แก้ไขข้อมูลสมาชิกล้มเหลว";
-              header("location: ./manageUser.php");
+              header("location: ./");
        }
         
     

@@ -3,54 +3,40 @@ session_start();
 require '../DB/connect.php';
 
 if (isset($_SESSION['id'])) {
-
     $id = $_SESSION['id'];
-    $sql = "SELECT SUM(outcome) outcome FROM credit WHERE Mid = $id";
-    $qur = $conn->prepare($sql);
-    $qur->execute();
-    if ($qur->rowCount() > 0) {
-        $rescredit = $qur->fetch(PDO::FETCH_ASSOC);
-    } else {
-        $rescredit = $qur->fetch(PDO::FETCH_ASSOC);
-        $rescredit['outcome'] = 0;
-    }
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-    $qurincome = $conn->prepare("SELECT SUM(cost) income FROM ordersold WHERE Mid_sale =  $id");
-    $qurincome->execute();
+        $id = $_SESSION['id'];
+        $date = $_POST["date"];
 
-    $resincome = $qurincome->fetch(PDO::FETCH_ASSOC);
-
-    if (isset($_POST['credit'])) {
-        $name = $_POST['namebank'];
-        $amount = $_POST['amount'];
-        $banknum = $_POST['banknum'];
-
-        if ($amount > $resincome['income']) {
-            $_SESSION['error'] = "<script>
-                                    Swal.fire({
-                                    icon: 'error',
-                                    title: 'ยอดเงินไม่เพียงพอ',
-                                    showConfirmButton: false,
-                                    timer: 2000
-                                        });                      
-                                </script>";
-            header("refresh:0.5; url=in-outcome.php");
+        if ($date == 'D') {
+            $sql = "SELECT oid,cost,SUM(cost-(cost*(5/100))) income,DATE_FORMAT(date, '%d-%m-%Y') date FROM ordersold WHERE Mid_sale = $id GROUP BY DATE_FORMAT(date, '%d%') ORDER BY DATE_FORMAT(date, '%Y-%m-%d') ASC";
+        } else if ($date == 'M') {
+            $sql = "SELECT oid,sum(cost) cost,SUM(cost-(cost*(5/100))) income,DATE_FORMAT(date, '%m-%Y') date FROM ordersold WHERE Mid_sale = $id GROUP BY DATE_FORMAT(date, '%m%') ORDER BY DATE_FORMAT(date, '%Y-%m-%d') ASC";
+        } else if ($date == 'Y') {
+            $sql = "SELECT oid,sum(cost) cost,SUM(cost-(cost*(5/100))) income,DATE_FORMAT(date, '%Y') date FROM ordersold WHERE Mid_sale = $id GROUP BY DATE_FORMAT(date, '%Y%') ORDER BY DATE_FORMAT(date, '%Y-%m-%d') ASC";
         } else {
-            echo "ถอนสำเร็จ";
-            $withdraw = $conn->prepare("INSERT INTO credit (Mid,namebank,banknumber,outcome,status) VALUES ($id,'$name','$banknum',$amount,'กำลังดำเนินการ')");
-            $withdraw->execute();
-            if ($withdraw) {
-                $_SESSION['success'] = "<script>
-                                        Swal.fire({
-                                        icon: 'success',
-                                        title: 'ทำรายการถอนสำเร็จ',
-                                        showConfirmButton: false,
-                                        timer: 2000
-                                            });                      
-                                    </script>";
-                header("refresh:0.5; url=in-outcome.php");
-            }
+            $sql = "SELECT oid,cost,(cost-(cost*(5/100))) income,DATE_FORMAT(date, '%d-%m-%Y') date FROM ordersold WHERE Mid_sale = $id ORDER BY DATE_FORMAT(date, '%Y-%m-%d') ASC";
         }
+
+        $qurdata = $conn->prepare($sql);
+        $qurdata->execute();
+        $resdata = $qurdata->fetchAll(PDO::FETCH_ASSOC);
+
+        $count = $conn->prepare("SELECT SUM(cost-(cost*(5/100))) income,SUM(cost*(5/100)) outcome FROM ordersold WHERE Mid_sale = $id");
+        $count->execute();
+
+        $resincome = $count->fetch(PDO::FETCH_ASSOC);
+    } else {
+        $qurdata = $conn->prepare("SELECT oid,cost,(cost-(cost*(5/100))) income,DATE_FORMAT(date, '%d-%m-%Y') date FROM ordersold WHERE Mid_sale = $id ORDER BY DATE_FORMAT(date, '%Y-%m-%d') ASC");
+        $qurdata->execute();
+        $resdata = $qurdata->fetchAll(PDO::FETCH_ASSOC);
+
+
+        $count = $conn->prepare("SELECT SUM(cost-(cost*(5/100))) income,SUM(cost*(5/100)) outcome FROM ordersold WHERE Mid_sale = $id");
+        $count->execute();
+
+        $resincome = $count->fetch(PDO::FETCH_ASSOC);
     }
 } else {
     header("location: ./");
@@ -128,33 +114,29 @@ if (isset($_SESSION['id'])) {
                 </div>
             </nav>
             <!-- Page content-->
-            <div class="container-fluid">
-                <h1 class="mt-2">รายได้ทั้งหมด</h1>
-                <div class="contrainer-fluid mt-4  border-top">
+            <div class="container-fluid ">
+                <div class="container-fluid d-flex justify-content-between">
+                    <h1>สรุปรายรับ-รายจ่าย</h1>
+                    <form method="post" class="mt-3">
+                        <label for="date">ดูรายงานประจำ ว/ด/ป :</label>
+                        <select id="date" name="date">
+                            <option value="All">ทั้งหมด</option>
+                            <option value="D">วัน</option>
+                            <option value="M">เดือน</option>
+                            <option value="Y">ปี</option>
+                        </select>
+                        <button type="submit" class="btn btn-primary">ดู</button>
+                    </form>
+                </div>
+
+
+                <div class="contrainer-fluid mt-3  border-top">
                     <div class="container-fluid d-flex mt-2">
                         <div class="card me-2" style="width: 18rem;">
-                            <h5 class="card-header">รายได้ทั้งหมด <ion-icon name="cash-outline"></ion-icon></h5>
+                            <h5 class="card-header">รายได้ทั้งหมด</h5>
                             <div class="card-Top ms-2 mt-2 mb-2">
-                                <h5 class="card-title ps-2"><?= $resincome['income'] ?> บาท</h5>
-                                <a href="inoutall.php" class="btn btn-primary mt-3">ดูภาพรวม</a>
-                            </div>
-                        </div>
-                        <div class="card me-2" style="width: 18rem;">
-                            <h5 class="card-header">ยอดเงินที่ถอนทั้งหมด </h5>
-                            <div class="card-Top ms-2 mt-2 mb-2">
-                                <h5 class="card-title ps-2">ถอน: <?= $rescredit['outcome'] ?> บาท</h5>
-                                <h5 class="card-title text-success ps-2">ได้รับ: <?= ($rescredit['outcome'] - ((5 / 100) * $rescredit['outcome'])) ?> บาท</h5>
-                                <!-- <a href="#" class="btn btn-primary">###</a> -->
-                            </div>
-                        </div>
-                        <div class="card me-2" style="width: 18rem;">
-                            <h5 class="card-header">ยอดเงินคงเหลือ <ion-icon name="wallet-outline"></ion-icon></h5>
-                            <div class="card-Top ms-2 mt-2 mb-2">
-                                <h5 class="card-title ps-2"><?= $resincome['income'] - $rescredit['outcome'] ?> บาท</h5>
-                            </div>
-                            <div class="card-footer text-muted d-flex justify-content-between">
-                                <button type="button" class="btn btn-primary mt-1" data-bs-toggle="modal" data-bs-target="#credit">ถอนเงิน</button>
-                                <a href="in-outcome2.php" class="btn btn-warning mt-1">เช็คสถานะ</a>
+                                <h5 class="card-title ps-2 text-success">รายรับ <?= $resincome['income'] ?> บาท</h5>
+                                <h5 class="card-title ps-2 text-danger">รายจ่าย <?= $resincome['outcome'] ?> บาท</h5>
                             </div>
                         </div>
                     </div>
@@ -162,30 +144,23 @@ if (isset($_SESSION['id'])) {
                         <table class="table table-striped table-hover" style="width:100%" id="myTable">
                             <thead>
                                 <tr>
-                                    <th scope="col">รหัสสินค้า</th>
-                                    <th scope="col">ชื่อเกม</th>
+                                    <th scope="col">รหัสออเดอร์</th>
                                     <th scope="col">ราคา</th>
-                                    <th scope="col">รหัสผู้ซื้อ</th>
-                                    <th scope="col">วันที่ซื้อ</th>
+                                    <th scope="col">ได้รับ</th>
+                                    <th scope="col">วันที่</th>
                                     <!-- <th scope="col">วันที่ซื้อ</th> -->
                                 </tr>
                             </thead>
                             <?php
-                            $id = $_SESSION['id'];
-                            $sqldata = "SELECT * FROM ordersold WHERE Mid_sale = $id";
-                            $qurdata = $conn->prepare($sqldata);
-                            $qurdata->execute();
 
-                            $resdata = $qurdata->fetchAll(PDO::FETCH_ASSOC);
                             if ($qurdata->rowCount() > 0) {
                                 foreach ($resdata as $row) {
                             ?>
                                     <tbody>
                                         <tr>
-                                            <td><?= $row['pid'] ?></td>
-                                            <td><?= $row['name'] ?></td>
+                                            <td><?= $row['oid'] ?></td>
                                             <td><?= $row['cost'] ?></td>
-                                            <td><?= $row['Mid_buy'] ?></td>
+                                            <td class="text-success"><?= $row['income'] ?></td>
                                             <td><?= $row['date'] ?></td>
                                             <!-- <td><a type="button" class="btn btn-primary" href=in-outcome.php?a=1>ลบ</a></td> -->
                                         </tr>

@@ -98,7 +98,7 @@ require '../DB/connect.php';
                                         <td><?= $row['descs'] ?></td>
                                         <td><?= $row['idcard'] ?></td>
                                         <td>
-                                            <?php if ($row['status'] != 'pass') { ?>
+                                            <?php if ($row['status'] != 'สำเร็จ') { ?>
                                                 <a href="verifysaler2.php?id=<?= $row['Mid']; ?>" class="btn btn-warning">ตรวจสอบ</a>
                                             <?php } else { ?>
                                                 <h5 class="text-success"><?= $row['status'] ?></h5>

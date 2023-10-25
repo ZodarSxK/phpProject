@@ -21,7 +21,7 @@ $result = $qurey->fetch(PDO::FETCH_ASSOC);
     <meta name="description" content="" />
     <meta name="author" content="" />
     <link rel="icon" type="image/x-icon" href="../assets/imgs/logo-bg.png">
-    <title>Dashboard</title>
+    <title>info</title>
     <!-- Core theme CSS (includes Bootstrap)-->
     <link href="./assets/css/styles.css" rel="stylesheet" />
     <!-- IONICONS -->

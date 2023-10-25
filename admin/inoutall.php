@@ -2,26 +2,41 @@
 session_start();
 require '../DB/connect.php';
 
-if (isset($_GET['id'])) {
-    $id = $_SESSION['id'];
-    $Mid = $_GET['id'];
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
+    $date = $_POST["date"];
 
-    echo $Mid;
-    $sql = "UPDATE credit SET status ='สำเร็จ' WHERE id = $Mid";
-    $query = $conn->prepare($sql);
-    $query->execute();
-    $_SESSION['success'] = "<script>
-                  Swal.fire({
-                      icon: 'success',
-                      title: 'ยืนยันตัวตนผู้ขายเรียบร้อย',
-                      showConfirmButton: false,
-                      timer: 2000
-                            });                      
-                     </script>";
+    if ($date == 'D') {
+        $sql = "SELECT id,Mid,outcome,SUM(outcome*(5/100)) income,DATE_FORMAT(date, '%d-%m-%Y') date FROM credit WHERE status='สำเร็จ' GROUP BY DATE_FORMAT(date, '%d%') ORDER BY DATE_FORMAT(date, '%Y-%m-%d') ASC";
+    } else if ($date == 'M') {
+        $sql = "SELECT id,Mid,outcome,SUM(outcome*(5/100)) income,DATE_FORMAT(date, '%m-%Y') date FROM credit WHERE status='สำเร็จ' GROUP BY DATE_FORMAT(date, '%m%') ORDER BY DATE_FORMAT(date, '%Y-%m-%d') ASC";
+    } else if ($date == 'Y') {
+        $sql = "SELECT id,Mid,outcome,SUM(outcome*(5/100)) income,DATE_FORMAT(date, '%Y') date FROM credit WHERE status='สำเร็จ' GROUP BY DATE_FORMAT(date, '%Y%') ORDER BY DATE_FORMAT(date, '%Y-%m-%d') ASC";
+    } else {
+        $sql = "SELECT id,Mid,outcome,(outcome*(5/100)) income,DATE_FORMAT(date, '%d-%m-%Y') date FROM credit WHERE status='สำเร็จ' ORDER BY DATE_FORMAT(date, '%Y-%m-%d') ASC";
+    }
 
-    header("location: in-outcome.php");
+    $qurrole = $conn->prepare($sql);
+    $qurrole->execute();
+    $resrole = $qurrole->fetchAll(PDO::FETCH_ASSOC);
+
+    $count = $conn->prepare("SELECT SUM(outcome*(5/100)) income FROM credit WHERE status = 'สำเร็จ'");
+    $count->execute();
+
+    $rescount = $count->fetch(PDO::FETCH_ASSOC);
+} else {
+    $qurrole = $conn->prepare("SELECT id,Mid,outcome,(outcome*(5/100)) income,DATE_FORMAT(date, '%d-%m-%Y') date FROM credit WHERE status='สำเร็จ' ORDER BY DATE_FORMAT(date, '%Y-%m-%d') ASC");
+    $qurrole->execute();
+
+    $resrole = $qurrole->fetchAll(PDO::FETCH_ASSOC);
+
+    $count = $conn->prepare("SELECT SUM(outcome*(5/100)) income FROM credit WHERE status = 'สำเร็จ'");
+    $count->execute();
+
+    $rescount = $count->fetch(PDO::FETCH_ASSOC);
 }
+
+
 
 ?>
 
@@ -34,7 +49,7 @@ if (isset($_GET['id'])) {
     <meta name="description" content="" />
     <meta name="author" content="" />
     <link rel="icon" type="image/x-icon" href="./assets/imgs/logo-bg.png">
-    <title>verifysaler</title>
+    <title>inoutall</title>
     <!-- table -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
@@ -92,20 +107,24 @@ if (isset($_GET['id'])) {
             <!-- Page content-->
             <div class="container-fluid mt-2">
                 <div class="container-fluid d-flex justify-content-between">
-                    <h1>รายการขอถอนเงิน</h1>
+                    <h1>สรุปรายรับ-รายจ่าย</h1>
+                    <form method="post" class="mt-3">
+                        <label for="date">ดูรายงานประจำ ว/ด/ป :</label>
+                        <select id="date" name="date">
+                            <option value="All">ทั้งหมด</option>
+                            <option value="D">วัน</option>
+                            <option value="M">เดือน</option>
+                            <option value="Y">ปี</option>
+                        </select>
+                        <button type="submit" class="btn btn-primary">ดู</button>
+                    </form>
                 </div>
-                <?php $count = $conn->prepare("SELECT SUM(outcome) income FROM credit WHERE status = 'สำเร็จ'");
-                $count->execute();
 
-                $rescount = $count->fetch(PDO::FETCH_ASSOC);
-
-                ?>
                 <div class="container-fluid border-top pt-2 mt-3">
                     <div class="card me-2 mb-2" style="width: 18rem;">
                         <h5 class="card-header">รายได้ทั้งหมด <ion-icon name="cash-outline"></ion-icon></h5>
                         <div class="card-Top ms-2 mt-2 mb-2">
-                            <h5 class="card-title ps-2"><?= $rescount['income'] * (5 / 100) ?> บาท</h5>
-                            <a href="inoutall.php" class="btn btn-primary mt-1">ดูภาพรวม</a>
+                            <h5 class="card-title ps-2"><?= $rescount['income'] ?> บาท</h5>
                         </div>
                     </div>
                     <table class="table table-striped table-hover border-top" style="width:100%" id="myTable">
@@ -113,17 +132,12 @@ if (isset($_GET['id'])) {
                             <tr>
                                 <th>รหัส</th>
                                 <th>รหัสผู้ถอน</th>
-                                <th>ธนาคาร</th>
-                                <th>จำนวน</th>
-                                <th>สถานะ</th>
+                                <th>จำนวนที่ถอน</th>
+                                <th>จำนวนที่ได้รับ</th>
                                 <th>วันที่</th>
                             </tr>
                         </thead>
                         <?php
-                        $qurrole = $conn->prepare("SELECT * FROM credit");
-                        $qurrole->execute();
-
-                        $resrole = $qurrole->fetchAll(PDO::FETCH_ASSOC);
 
                         if ($qurrole->rowCount() > 0) {
                             foreach ($resrole as $row) {
@@ -132,17 +146,8 @@ if (isset($_GET['id'])) {
                                     <tr>
                                         <td><?= $row['id'] ?></td>
                                         <td><?= $row['Mid'] ?></td>
-                                        <td><?= $row['namebank'] ?></td>
                                         <td><?= $row['outcome'] ?></td>
-                                        <td>
-                                            <?php if ($row['status'] != 'สำเร็จ') { ?>
-                                                <a href="in-outcome2.php?id=<?= $row['id']; ?>" class="btn btn-warning">ทำการโอน</a>
-                                            <?php } else { ?>
-                                                <a href="in-outcome2.php?id=<?= $row['id']; ?>" style="text-decoration: none;">
-                                                    <h5 class="text-success"><?= $row['status'] ?></h5>
-                                                </a>
-                                            <?php } ?>
-                                        </td>
+                                        <td class="text-success"><?= $row['income'] ?></td>
                                         <td><?= $row['date'] ?></td>
                                     </tr>
                                 </tbody>

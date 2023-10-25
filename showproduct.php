@@ -92,7 +92,7 @@ $rs = $query->fetch(PDO::FETCH_ASSOC);
                         <div class="card-body">
                             <h5 class="card-title">ร้าน <?= $resinfo['name'] ?></h5>
                             <?php
-                            if($resinfo['status'] == 'pass'){
+                            if($resinfo['status'] == 'สำเร็จ'){
                             ?>
                             <span class="text-success">ได้รับการยืนยันผู้ขายแล้ว <ion-icon name="medal-sharp"></ion-icon></span>
                             <?php
