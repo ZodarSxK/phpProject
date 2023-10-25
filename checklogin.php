@@ -1,7 +1,7 @@
 
 <?php
 session_start();
-include('../DB/connect.php');
+include('./DB/connect.php');
 
 if (isset($_POST['login'])) {
 
@@ -10,16 +10,16 @@ if (isset($_POST['login'])) {
 
     if (empty($email)) {
         $_SESSION['error'] = 'กรุณากรอกอีเมล';
-        header("location: ../");
+        header("location: ./");
     } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $_SESSION['error'] = 'รูปแบบอีเมลไม่ถูกต้อง';
-        header("location: ../");
+        header("location: ./");
     } elseif (empty($password)) {
         $_SESSION['error'] = 'กรุณากรอกรหัสผ่าน';
-        header("location: ../");
+        header("location: ./");
     } elseif (strlen($_POST['password']) < 5 || strlen($_POST['password']) > 20) {
         $_SESSION['error'] = 'รหัสผ่านต้องมีความยาว 5 ถึง 20 ตัวอักษร';
-        header("location: ../");
+        header("location: ./");
     } else {
         try {
             //code...
@@ -48,11 +48,11 @@ if (isset($_POST['login'])) {
                             $checklicence = $conn->prepare("SELECT * FROM licence WHERE Mid = $Mid");
                             $checklicence->execute();
                             if($checklicence->rowCount() > 0){
-                                header("location: ../");
+                                header("location: ./");
                             }else{
                                 $insertlicence = $conn->prepare("INSERT INTO licence (Mid) VALUES ($Mid)");
                                 $insertlicence->execute();
-                                header("location: ../");
+                                header("location: ./");
                             }
                             
                         }
@@ -63,7 +63,7 @@ if (isset($_POST['login'])) {
                     title: 'รหัสผ่านไม่ถูกต้อง'
                           });                      
                    </script>";
-                        header("location: ../ ");
+                        header("location: ./ ");
                     }
                 } else {
                     $_SESSION['A'] = "<script>
@@ -72,7 +72,7 @@ if (isset($_POST['login'])) {
                     title: 'อีเมลไม่ถูกต้อง'
                           });                      
                    </script>";
-                    header("location: ../ ");
+                    header("location: ./ ");
                 }
             } else {
                 $_SESSION['A'] = "<script>
@@ -81,7 +81,7 @@ if (isset($_POST['login'])) {
                     title: 'ไม่มี User นี้ในระบบ'
                           });                      
                    </script>";
-                header("location: ../ ");
+                header("location: ./ ");
             }
         } catch (PDOException $err) {
             //throw $th;

@@ -1,6 +1,6 @@
 <?php 
     session_start();
-    include('../DB/connect.php');
+    include('./DB/connect.php');
 
     if(isset($_POST['reg'])){
         $username = $_POST['username'];
@@ -12,29 +12,29 @@
 
         if(empty($username)){
             $_SESSION['error'] = 'กรุณากรอกชื่อ';
-            header("location: ../ ");
+            header("location: ./ ");
         }elseif(empty($email)){
             $_SESSION['error'] = 'กรุณากรอกอีเมล';
-            header("location: ../ ");
+            header("location: ./ ");
         }
         elseif(!filter_var($email,FILTER_VALIDATE_EMAIL)){
             $_SESSION['error'] = 'รูปแบบอีเมลไม่ถูกต้อง';
-            header("location: ../ ");
+            header("location: ./ ");
         }elseif(empty($password)){
             $_SESSION['error'] = 'กรุณากรอกรหัสผ่าน';
-            header("location: ../ ");
+            header("location: ./ ");
         }elseif(strlen($_POST['password']) <5 || strlen($_POST['password']) >20){
             $_SESSION['error'] = 'รหัสผ่านต้องมีความยาว 5 ถึง 20 ตัวอักษร';
-            header("location: ../ ");
+            header("location: ./ ");
         }elseif(empty($password2)){
             $_SESSION['error'] = 'กรุณายืนยันรหัสผ่าน';
-            header("location: ../ ");
+            header("location: ./ ");
         }elseif($password != $password2){
             $_SESSION['error'] = 'รหัสผ่านไม่ตรงกัน';
-            header("location: ../ ");
+            header("location: ./ ");
         }elseif(empty($tel)){
             $_SESSION['error'] = 'กรุณากรอกเบอร์โทร';
-            header("location: ../ ");
+            header("location: ./ ");
         }else{
             try {
                 //code...
@@ -46,10 +46,10 @@
 
                 if($result['email'] == $email){
                     $_SESSION['warning'] = "มีอีเมลนี้ในระบบแล้ว";
-                    header("location: ../");
+                    header("location: ./");
                 }elseif($result['tel'] == $tel){
                     $_SESSION['warning'] = "มีเบอร์โทรนี้ในระบบแล้ว";
-                    header("location: ../");
+                    header("location: ./");
                 }elseif(!isset($_SESSION['error'])){
 
                     $passwordHash = password_hash($password, PASSWORD_DEFAULT);
@@ -74,10 +74,10 @@
                         timer: 1000
                               });                      
                        </script>";
-                    header("location: ../");
+                    header("location: ./");
                 }else{
                     $_SESSION['error'] = "มีบางอย่างผิดพลาด";
-                    header("location: ../ ");
+                    header("location: ./ ");
                 }
 
 

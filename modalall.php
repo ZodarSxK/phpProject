@@ -7,7 +7,7 @@
             </div>
             <div class="modal-body">
                 <!-- form -->
-                <form method="post" action="./sql/checklogin.php">
+                <form method="post" action="./checklogin.php">
                     <div class="d-flex justify-content-center">
                         <img class="mb-4" src="./assets/imgs/logo-bg.png" alt="" width="100" height="100">
                     </div>
@@ -57,7 +57,7 @@
                     <img class="mb-4" src="./assets/imgs/logo-bg.png" alt="" width="100" height="100">
                 </div>
                 <!-- form -->
-                <form method="post" action="./sql/regis.php">
+                <form method="post" action="./regis.php">
                     <h1 class="h3 mb-3 fw-normal text-center">Register</h1>
 
                     <?php if (isset($_SESSION['error'])) { ?>
@@ -117,7 +117,7 @@
                     <img class="mb-4" src="./assets/imgs/logo-bg.png" alt="" width="100" height="100">
                 </div>
                 <!-- form -->
-                <form method="post" action="./sql/regsaler.php" enctype="multipart/form-data">
+                <form method="post" action="./regsaler.php" enctype="multipart/form-data">
                     <h1 class="h3 mb-3 fw-normal text-center">Register-Saler</h1>
 
                     <?php if (isset($_SESSION['error'])) { ?>

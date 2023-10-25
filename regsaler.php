@@ -1,6 +1,6 @@
 <?php
 session_start();
-include('../DB/connect.php');
+include('./DB/connect.php');
 
 if(isset($_POST['regsaler'])){
     $username = $_POST['username'];
@@ -18,47 +18,47 @@ if(isset($_POST['regsaler'])){
         $extention = explode(".",$img['name']);
         $fileActExt = strtolower(end($extention));
         $fileNew = rand() . "." . $fileActExt;
-        $filePath = "../assets/imgs/".$fileNew;
+        $filePath = "./assets/imgs/".$fileNew;
 
 
         if(empty($username)){
             $_SESSION['error'] = 'กรุณากรอกชื่อ';
-            header("location: ../ ");
+            header("location: ./ ");
         }elseif(empty($email)){
             $_SESSION['error'] = 'กรุณากรอกอีเมล';
-            header("location: ../ ");
+            header("location: ./ ");
         }
         elseif(!filter_var($email,FILTER_VALIDATE_EMAIL)){
             $_SESSION['error'] = 'รูปแบบอีเมลไม่ถูกต้อง';
-            header("location: ../ ");
+            header("location: ./ ");
         }elseif(empty($password)){
             $_SESSION['error'] = 'กรุณากรอกรหัสผ่าน';
-            header("location: ../ ");
+            header("location: ./ ");
         }elseif(strlen($_POST['password']) <5 || strlen($_POST['password']) >20){
             $_SESSION['error'] = 'รหัสผ่านต้องมีความยาว 5 ถึง 20 ตัวอักษร';
-            header("location: ../ ");
+            header("location: ./ ");
         }elseif(empty($password2)){
             $_SESSION['error'] = 'กรุณายืนยันรหัสผ่าน';
-            header("location: ../ ");
+            header("location: ./ ");
         }elseif($password != $password2){
             $_SESSION['error'] = 'รหัสผ่านไม่ตรงกัน';
-            header("location: ../ ");
+            header("location: ./ ");
         }elseif(empty($tel)){
             $_SESSION['error'] = 'กรุณากรอกเบอร์โทร';
-            header("location: ../ ");
+            header("location: ./ ");
         }elseif(empty($descs)){
             $_SESSION['error'] = 'กรุณากรอกชื่อร้าน';
-            header("location: ../ ");
+            header("location: ./ ");
         }elseif(empty($address)){
             $_SESSION['error'] = 'กรุณากรอกที่อยู่';
-            header("location: ../ ");
+            header("location: ./ ");
         }elseif(empty($idcard)){
             $_SESSION['error'] = 'กรุณากรอกรหัสบัตรประชาชน';
-            header("location: ../ ");
+            header("location: ./ ");
         }
         elseif(empty($img)){
             $_SESSION['error'] = 'กรุณาแนบรูปบัตรประชาชน';
-            header("location: ../ ");
+            header("location: ./ ");
         }
         else{
             try {
@@ -76,7 +76,7 @@ if(isset($_POST['regsaler'])){
                         title: 'มีอีเมลนี้ในระบบแล้ว'
                               });                      
                        </script>";
-                    header("location: ../");
+                    header("location: ./");
                 }elseif($result['tel'] == $tel){
                     $_SESSION['warning'] = "<script>
                     Swal.fire({
@@ -84,7 +84,7 @@ if(isset($_POST['regsaler'])){
                         title: 'มีเบอร์นี้ในระบบแล้ว'
                               });                      
                        </script>";
-                    header("location: ../");
+                    header("location: ./");
 
                 }elseif(!isset($_SESSION['error'])){
 
@@ -118,7 +118,7 @@ if(isset($_POST['regsaler'])){
                                     timer: 1000
                                           });                      
                                    </script>";
-                                header("location: ../");
+                                header("location: ./");
                             }
                         }
                     }
@@ -127,7 +127,7 @@ if(isset($_POST['regsaler'])){
                     
                 }else{
                     $_SESSION['error'] = "มีบางอย่างผิดพลาด";
-                    header("location: ../");
+                    header("location: ./");
                 }
 
 
