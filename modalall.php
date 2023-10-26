@@ -26,16 +26,17 @@
 
                     <div class="form-floating mb-2">
                         <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com" name="email" required>
-                        <label for="floatingInput">Email address</label>
+                        <label for="floatingInput">อีเมล</label>
                     </div>
                     <div class="form-floating mb-3">
                         <input type="password" class="form-control" id="floatingPassword" placeholder="Password" name="password" required>
-                        <label for="floatingPassword">Password</label>
+                        <label for="floatingPassword">รหัสผ่าน</label>
                     </div>
-                    <button class="w-100 btn btn-lg btn-primary" type="submit" name="login">Login</button>
+                    <a href="reset.php" class="text-decoration-none">ลืมรหัสผ่าน?</a>
+                    <button class="w-100 btn btn-lg btn-primary mt-2" type="submit" name="login">เข้าสู่ระบบ</button>
                     <div class="mt-3 text-center">
-                        <span>don't have account?</span>
-                        <a type="button" class="text-decoration-none" data-bs-toggle="modal" data-bs-target="#regModal" data-bs-dismiss="modal">Register</a>
+                        <span>ยังไม่ได้เป็นสมาชิก?</span>
+                        <a type="button" class="text-decoration-none" data-bs-toggle="modal" data-bs-target="#regModal" data-bs-dismiss="modal">สมัครสมาชิก</a>
                     </div>
 
                 </form>
@@ -58,7 +59,7 @@
                 </div>
                 <!-- form -->
                 <form method="post" action="./regis.php">
-                    <h1 class="h3 mb-3 fw-normal text-center">Register</h1>
+                    <h1 class="h3 mb-3 fw-normal text-center">สมัครสมาชิก</h1>
 
                     <?php if (isset($_SESSION['error'])) { ?>
                         <div class="alert alert-danger" role="alert">
@@ -73,29 +74,29 @@
 
                     <div class="form-floating mb-3">
                         <input type="text" class="form-control" id="floatingusername" name="username" required>
-                        <label for="floatingusername">Username</label>
+                        <label for="floatingusername">ชื่อ</label>
                     </div>
                     <div class="form-floating mb-3">
                         <input type="email" class="form-control" id="floatingemail" name="email" required>
-                        <label for="floatingemail">Email address</label>
+                        <label for="floatingemail">อีเมล</label>
                     </div>
                     <div class="form-floating mb-3">
                         <input type="password" class="form-control" id="floatingPassword" name="password" required>
-                        <label for="floatingPassword">Password</label>
+                        <label for="floatingPassword">รหัสผ่าน</label>
                     </div>
                     <div class="form-floating mb-3">
                         <input type="password" class="form-control" id="floatingPassword2" name="password2" required>
-                        <label for="floatingPassword2">ConfirmPassword</label>
+                        <label for="floatingPassword2">ยืนยันรหัสผ่าน</label>
                     </div>
                     <div class="form-floating mb-3">
                         <input type="tel" class="form-control" id="floatingtel" name="tel" required>
-                        <label for="floatingtel">tel</label>
+                        <label for="floatingtel">เบอร์โทร</label>
                     </div>
                     <input type="hidden" name="role" value="member"></input>
-                    <button class="w-100 btn btn-lg btn-primary" type="submit" name="reg">Register</button>
+                    <button class="w-100 btn btn-lg btn-primary" type="submit" name="reg">สมัครสมาชิก</button>
                     <div class="mt-3 text-center">
-                        <span>Do you want to apply to be a seller?</span>
-                        <a type="button" class="text-decoration-none" data-bs-toggle="modal" data-bs-target="#regsalerModal" data-bs-dismiss="modal">Register-Saler</a>
+                        <span>ต้องการสมัครเป็นผู้ขาย?</span>
+                        <a type="button" class="text-decoration-none" data-bs-toggle="modal" data-bs-target="#regsalerModal" data-bs-dismiss="modal">สมัครสมาชิกผู้ขาย</a>
                     </div>
 
                 </form>
@@ -118,7 +119,7 @@
                 </div>
                 <!-- form -->
                 <form method="post" action="./regsaler.php" enctype="multipart/form-data">
-                    <h1 class="h3 mb-3 fw-normal text-center">Register-Saler</h1>
+                    <h1 class="h3 mb-3 fw-normal text-center">สมัครสมาชิกผู้ขาย</h1>
 
                     <?php if (isset($_SESSION['error'])) { ?>
                         <div class="alert alert-danger" role="alert">
@@ -131,41 +132,42 @@
 
                     <div class="form-floating mb-3">
                         <input type="text" class="form-control" id="floatingusername" name="username" required>
-                        <label for="floatingusername">Username</label>
+                        <label for="floatingusername">ชื่อ</label>
                     </div>
                     <div class="form-floating mb-3">
                         <input type="email" class="form-control" id="floatingemail" name="email" required>
-                        <label for="floatingemail">Email address</label>
+                        <label for="floatingemail">อีเมล</label>
                     </div>
                     <div class="form-floating mb-3">
                         <input type="password" class="form-control" id="floatingPassword" name="password" required>
-                        <label for="floatingPassword">Password</label>
+                        <label for="floatingPassword">รหัสผ่าน</label>
                     </div>
                     <div class="form-floating mb-3">
                         <input type="password" class="form-control" id="floatingPassword2" name="password2" required>
-                        <label for="floatingPassword2">Confirm Password</label>
+                        <label for="floatingPassword2">ยืนยันรหัสผ่าน</label>
                     </div>
                     <div class="form-floating mb-3">
                         <input type="tel" class="form-control" id="floatingtel" name="tel" required>
-                        <label for="floatingtel">Telephone</label>
+                        <label for="floatingtel">เบอร์โทร</label>
                     </div>
                     <div class="form-floating mb-3">
                         <input type="text" class="form-control" id="floatingdesc" name="descs" required>
-                        <label for="floatingdesc">Description</label>
+                        <label for="floatingdesc">รายละเอียดร้าน</label>
                     </div>
                     <div class="form-floating mb-3">
                         <textarea class="form-control" id="floatingaddress" name="address" cols="10" required></textarea>
-                        <label for="floatingaddress">Address</label>
+                        <label for="floatingaddress">ที่อยู่</label>
                     </div>
                     <div class="form-floating mb-3">
                         <input type="text" class="form-control" id="floatingidcard" name="idcard" required>
-                        <label for="floatingidcard">IDCard</label>
+                        <label for="floatingidcard">รหัสบัตรประชาชน</label>
                     </div>
                     <div class="form-control mb-3">
-                        <input type="file" class="form-control" placeholder="IMG IDCard" name="imgid" required>
+                        <label for="imgid">แนบรูปบัตรประชาชน</label>
+                        <input type="file" class="form-control" placeholder="IMG IDCard" id="imgid" name="imgid" required>
                     </div>
                     <input type="hidden" name="role" value="saler">
-                    <button class="w-100 btn btn-lg btn-primary" type="submit" name="regsaler">Register</button>
+                    <button class="w-100 btn btn-lg btn-primary" type="submit" name="regsaler">สมัครสมาชิกผู้ขาย</button>
                 </form>
             </div>
         </div>

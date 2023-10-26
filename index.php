@@ -31,6 +31,13 @@ $product = $qureypro->fetchAll(PDO::FETCH_ASSOC);
 
 <body>
   <?php include("nav.php"); ?>
+
+  <?php if (isset($_SESSION['password'])) { ?>
+    <?php
+    echo $_SESSION['password'];
+    unset($_SESSION['password']);
+    ?>
+  <?php } ?>
   <?php if (isset($_SESSION['error'])) { ?>
     <?php
     echo $_SESSION['error'];

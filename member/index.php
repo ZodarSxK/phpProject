@@ -74,7 +74,10 @@ $result = $qurey->fetch(PDO::FETCH_ASSOC);
             </nav>
             <!-- Page content-->
             <div class="container-fluid">
-                <h1 class="mb-3">ข้อมูลส่วนตัว</h1>
+                <div class="container-fluid d-flex justify-content-between">
+                    <h1 class="mb-3">ข้อมูลส่วนตัว</h1>
+                    <a href="editpass.php" class="btn btn-primary h-50 mt-3">เปลี่ยนรหัสผ่าน</a>
+                </div>
                 <form action="./editinfo.php" method="post" enctype="multipart/form-data" class="border-top">
                     <div class="container-fluid d-flex justify-content-center mt-2">
                         <?php if (isset($result['profile'])) { ?>

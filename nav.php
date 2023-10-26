@@ -83,7 +83,7 @@ if (isset($_SESSION['id'])) {
             <?php } else { ?>
                 <div class="col-md-3 d-flex justify-content-end ">
 
-                    <button id="btnlogin" type="button" class="btn btn-outline-dark me-3 ms-3" data-bs-toggle="modal" data-bs-target="#loginModal">Login</button>
+                    <button id="btnlogin" type="button" class="btn btn-outline-dark me-3 ms-3" data-bs-toggle="modal" data-bs-target="#loginModal">เข้าสู่ระบบ</button>
 
                     <!-- <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#regModal">Sign-up</button> -->
                 </div>
