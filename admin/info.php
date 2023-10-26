@@ -2,20 +2,20 @@
 session_start();
 require '../DB/connect.php';
 
-if(!isset($_SESSION['id'])){
+if (!isset($_SESSION['id'])) {
     header("location: ../");
 }
 
 
-
 $id = $_SESSION['id'];
 
-$sql = "SELECT * FROM members WHERE Mid = :id";
+$sql = "SELECT * FROM `members` INNER JOIN licence ON members.Mid = licence.Mid WHERE members.Mid=:id";
 $qurey = $conn->prepare($sql);
 $qurey->bindParam(':id', $id);
 $qurey->execute();
 
 $result = $qurey->fetch(PDO::FETCH_ASSOC);
+
 ?>
 
 <!DOCTYPE html>
@@ -26,8 +26,8 @@ $result = $qurey->fetch(PDO::FETCH_ASSOC);
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <meta name="description" content="" />
     <meta name="author" content="" />
-    <link rel="icon" type="image/x-icon" href="../assets/imgs/logo-bg.png">
-    <title>info</title>
+    <link rel="icon" type="image/x-icon" href="./assets/imgs/logo-bg.png">
+    <title>Personal info</title>
     <!-- Core theme CSS (includes Bootstrap)-->
     <link href="./assets/css/styles.css" rel="stylesheet" />
     <!-- IONICONS -->
@@ -57,9 +57,10 @@ $result = $qurey->fetch(PDO::FETCH_ASSOC);
         <div class="border-end bg-white" id="sidebar-wrapper">
             <div class="sidebar-heading border-bottom bg-light"><img class="ms-5" src="./assets/imgs/logo-bg.png" width="100px"></div>
             <div class="list-group list-group-flush" id="myTab">
-                <a class="list-group-item list-group-item-action list-group-item-light p-3" href="index.php">ข้อมูลส่วนตัว</a>
-                <a class="list-group-item list-group-item-action list-group-item-light p-3" href="mykey.php">คีย์ของฉัน</a>
-                <a class="list-group-item list-group-item-action list-group-item-light p-3" href="history.php">รายการบัญชี</a>
+                <a class="list-group-item list-group-item-action list-group-item-light p-3" href="./">จัดการสมาชิก</a>
+                <a class="list-group-item list-group-item-action list-group-item-light p-3" href="verifysaler.php">ยืนยันตัวตนผู้ขาย</a>
+                <a class="list-group-item list-group-item-action list-group-item-light p-3" href="in-outcome.php">รายการขอถอนเงิน</a>
+                <a class="list-group-item list-group-item-action list-group-item-light p-3" href="info.php">ข้อมูลส่วนตัว</a>
             </div>
         </div>
         <!-- Page content wrapper-->
@@ -79,7 +80,7 @@ $result = $qurey->fetch(PDO::FETCH_ASSOC);
                 </div>
             </nav>
             <!-- Page content-->
-            <div class="container-fluid">
+            <div class="container-fluid mt-2">
                 <div class="container-fluid d-flex justify-content-between">
                     <h1 class="mb-3">ข้อมูลส่วนตัว</h1>
                     <a href="editpass.php" class="btn btn-primary h-50 mt-3">เปลี่ยนรหัสผ่าน</a>
@@ -121,6 +122,12 @@ $result = $qurey->fetch(PDO::FETCH_ASSOC);
                         <div class="mb-3">
                             <label for="exampleFormControlInput1" class="form-label">Tel</label>
                             <input value="<?= $result['tel'] ?>" type="text" class="form-control" id="exampleFormControlInput1" name="tel">
+                        </div>
+                    </div>
+                    <div class="container-fluid">
+                        <div class="mb-3">
+                            <label for="exampleFormControlInput1" class="form-label">Description</label>
+                            <input value="<?= $result['descs'] ?>" type="text" class="form-control" id="exampleFormControlInput1" name="descs">
                         </div>
                     </div>
                     <div class="container-fluid">

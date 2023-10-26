@@ -2,6 +2,11 @@
 session_start();
 require '../DB/connect.php';
 
+if(!isset($_SESSION['id'])){
+    header("location: ../");
+}
+
+
 $id = $_SESSION['id'];
 
 $sql = "SELECT * FROM `members` INNER JOIN licence ON members.Mid = licence.Mid WHERE members.Mid=:id";
@@ -77,8 +82,9 @@ $result = $qurey->fetch(PDO::FETCH_ASSOC);
             </nav>
             <!-- Page content-->
             <div class="container-fluid mt-2">
-                <div class="container d-flex ">
+                <div class="container-fluid d-flex justify-content-between">
                     <h1 class="mb-3">ข้อมูลส่วนตัว</h1>
+                    <a href="editpass.php" class="btn btn-primary h-50 mt-3">เปลี่ยนรหัสผ่าน</a>
                 </div>
                 <form action="./editinfo.php" method="post" enctype="multipart/form-data" class="border-top">
                     <div class="container-fluid d-flex justify-content-center mt-2">
@@ -89,17 +95,17 @@ $result = $qurey->fetch(PDO::FETCH_ASSOC);
                         <?php } ?>
                     </div>
                     <div class="container-fluid d-flex justify-content-center mt-2">
-                    <?php
-                    if ($result['status'] == 'สำเร็จ') {
-                    ?>
-                        <span class="text-success">ได้รับการยืนยันผู้ขายแล้ว <ion-icon name="medal-sharp"></ion-icon></span>
-                    <?php
-                    } else {
-                    ?>
-                        <span class="text-warning">ยังไม่ได้รับการยืนยันผู้ขาย</span>
-                    <?php
-                    }
-                    ?>
+                        <?php
+                        if ($result['status'] == 'สำเร็จ') {
+                        ?>
+                            <span class="text-success">ได้รับการยืนยันผู้ขายแล้ว <ion-icon name="medal-sharp"></ion-icon></span>
+                        <?php
+                        } else {
+                        ?>
+                            <span class="text-warning">ยังไม่ได้รับการยืนยันผู้ขาย</span>
+                        <?php
+                        }
+                        ?>
                     </div>
                     <div class="container-fluid">
                         <div class="mb-3 px-5">
