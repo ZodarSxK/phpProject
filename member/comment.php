@@ -4,14 +4,17 @@ require '../DB/connect.php';
 
 $id = $_SESSION['id'];
 
-$sql = "SELECT products.pid, category.name, products.Code ,products.pdate,products.comment FROM category INNER JOIN products ON category.Cid=products.Cid WHERE products.owner=$id ";
-$query = $conn->prepare($sql);
-$query->execute();
-$result = $query->fetchAll(PDO::FETCH_ASSOC);
+if(isset($_GET['submit'])){
+    $pid = $_GET['id'];
+    $com = $_GET['comment'];
+    $comment = $conn->prepare("UPDATE products SET comment = '$com' WHERE  pid=$pid");
+    $comment->execute();
 
-if (isset($_GET['cart'])) {
-    unset($_SESSION['cart']);
+    if($comment){
+        header("location: mykey.php");
+    }
 }
+
 ?>
 
 <!DOCTYPE html>
@@ -65,43 +68,18 @@ if (isset($_GET['cart'])) {
             </nav>
             <!-- Page content-->
             <div class="container-fluid ">
-                <h1 class="mt-2">คีย์ของฉัน</h1>
-                <!-- body -->
-                <div class="container-fluid border-top mt-3 pt-2">
-                    <table id="myTable" class="table table-striped" style="width:100%">
-                        <thead>
-                            <tr>
-                                <th scope="col">ID</th>
-                                <th scope="col">ชื่อเกม</th>
-                                <th scope="col">รหัสโค้ดเกม</th>
-                                <th scope="col">วันที่</th>
-                                <th scope="col"></th>
-                            </tr>
-                        </thead>
-                        <tbody>
+                <h1 class="mt-2">คอมเม้นโค้ด</h1>
+                <form>
+                    <div class="form-group">
+                        <label for="exampleInput">คอมเม้น</label>
+                        <small id="emailHelp" class="form-text text-muted">เขียนสิ่งที่ต้องการคอมเม้นลงได้เลย.</small>
+                        <textarea name="comment" class="form-control" id="" cols="30" rows="10" require></textarea>
+                    </div>
+                    <input type="hidden" value="<?= $_GET['id']?>" name="id">
+                    <a href="mykey.php" class="btn btn-danger mt-2">กลับ</a>
+                    <button type="submit" class="btn btn-primary mt-2" name="submit">ส่ง</button>
+                </form>
 
-                            <?php
-                            if ($query->rowCount() > 0) {
-                                foreach ($result as $row) {
-                            ?>
-                                    <tr>
-                                        <td><?= $row['pid']; ?></td>
-                                        <td><?= $row['name']; ?></td>
-                                        <td><?= $row['Code'] ?></td>
-                                        <td><?= $row['pdate'] ?></td>
-                                        <?php if($row['comment'] == '') {
-                                        ?>
-                                        <td><a href="comment.php?id=<?= $row['pid'];?>" class="btn btn-primary">คอมเม้น</a></td>
-                                        <?php }else{?>
-                                            <td><h5>คอมเม้นแล้ว</h5></td>
-                                            <?php }?>
-                                    </tr>
-                            <?php }
-                            }
-                            ?>
-                        </tbody>
-                    </table>
-                </div>
             </div>
         </div>
     </div>

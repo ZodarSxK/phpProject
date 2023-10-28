@@ -1,8 +1,12 @@
 <?php
-  $hostname ="127.0.0.1";
-  $username = "root";
-  $password = "";
-  $database = "Project";
+  $hostname ="202.28.34.205";
+  $username = "63011212180";
+  $password = "63011212180";
+  $database = "db63011212180";
+  // $hostname ="127.0.0.1";
+  // $username = "root";
+  // $password = "";
+  // $database = "Project";
   try {
     //code...
       mysqli_report(MYSQLI_REPORT_OFF); 

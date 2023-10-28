@@ -2,6 +2,10 @@
 session_start();
 require '../DB/connect.php';
 
+$qurrole = $conn->prepare("SELECT * FROM products INNER JOIN category ON products.Cid = category.Cid INNER JOIN members ON category.Mid = members.Mid WHERE comment != ''");
+$qurrole->execute();
+
+$resrole = $qurrole->fetchAll(PDO::FETCH_ASSOC);
 
 ?>
 
@@ -14,7 +18,7 @@ require '../DB/connect.php';
     <meta name="description" content="" />
     <meta name="author" content="" />
     <link rel="icon" type="image/x-icon" href="./assets/imgs/logo-bg.png">
-    <title>verifysaler</title>
+    <title>inoutall</title>
     <!-- table -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
@@ -42,6 +46,7 @@ require '../DB/connect.php';
         unset($_SESSION['error']);
         ?>
     <?php } ?>
+
     <div class="d-flex" id="wrapper">
         <!-- Sidebar-->
         <div class="border-end bg-white" id="sidebar-wrapper">
@@ -70,44 +75,56 @@ require '../DB/connect.php';
                     </div>
                 </div>
             </nav>
+            <!-- Page content-->
             <div class="container-fluid mt-2">
-                <h1>withdrawal list</h1>
-                <div class="container-fluid border-top pt-2 mt-3">
-                    <?php
-                    $id = $_GET['id'];
+                
+                    <div class="container"><h1>คอมเม้น</h1></div>
+                    
+                    <div class="container">
+                        <table class="table table-striped table-hover border-top" style="width:100%" id="myTable">
+                            <thead>
+                                <tr>
+                                    <th>รหัสสินค้า</th>
+                                    <th>ชื่อผู้ขาย</th>
+                                    <th>โค้ด</th>
+                                    <th>คอมเม้น</th>
+                                    <th>วันที่</th>
+                                </tr>
+                            </thead>
+                            <?php
 
-                    $qurrole = $conn->prepare("SELECT * FROM credit WHERE id = $id");
-                    $qurrole->execute();
-
-                    $resrole = $qurrole->fetch(PDO::FETCH_ASSOC);
-
-                    ?>
-                    <h5>รหัสผู้ถอน : <?= $resrole['Mid'] ?></h5>
-                    <h5>ธนาคาร : <?= $resrole['namebank'] ?></h5>
-                    <h5>เลขบัญชี : <?= $resrole['banknumber'] ?></h5>
-                    <h5>จำนวน : <?= $resrole['outcome'] - ((5 / 100) * $resrole['outcome']) ?> บาท</h5>
-                    <h5 class="text-success">สถานะ : <?= $resrole['status'] ?></h5>
-                    <div class="button mt-2 border-top pt-2">
-                        <a href="in-outcome.php?id=<?= $resrole['id']; ?>" class="btn btn-success">ยืนยันการโอน</a>
-                        <a href="in-outcome.php?" class="btn btn-warning">กลับ</a>
+                            if ($qurrole->rowCount() > 0) {
+                                foreach ($resrole as $row) {
+                            ?>
+                                    <tbody>
+                                        <tr>
+                                            <td><?= $row['pid'] ?></td>
+                                            <td><?= $row['name'] ?></td>
+                                            <td><?= $row['Code'] ?></td>
+                                            <td><?= $row['comment'] ?></td>
+                                            <td><?= $row['pdate'] ?></td>
+                                        </tr>
+                                    </tbody>
+                            <?php }
+                            } ?>
+                        </table>
                     </div>
 
-                </div>
-
+                
             </div>
-
-
-            <!-- Bootstrap core JS-->
-            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
-            <!-- Core theme JS-->
-            <script src="./assets/js/scripts.js"></script>
-            <!-- table -->
-            <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
-            <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
-            <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
-            <script>
-                new DataTable('#myTable');
-            </script>
+        </div>
+    </div>
+    <!-- Bootstrap core JS-->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Core theme JS-->
+    <script src="./assets/js/scripts.js"></script>
+    <!-- table -->
+    <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+    <script>
+        new DataTable('#myTable');
+    </script>
 
 </body>
 

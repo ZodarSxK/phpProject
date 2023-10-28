@@ -7,21 +7,30 @@ if (isset($_SESSION['id'])) {
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         $id = $_SESSION['id'];
-        $date = $_POST["date"];
+        // $date = $_POST["date"];
 
-        if ($date == 'D') {
-            $sql = "SELECT oid,cost,SUM(cost-(cost*(5/100))) income,DATE_FORMAT(date, '%d-%m-%Y') date FROM ordersold WHERE Mid_sale = $id GROUP BY DATE_FORMAT(date, '%d%') ORDER BY DATE_FORMAT(date, '%Y-%m-%d') ASC";
-        } else if ($date == 'M') {
-            $sql = "SELECT oid,sum(cost) cost,SUM(cost-(cost*(5/100))) income,DATE_FORMAT(date, '%m-%Y') date FROM ordersold WHERE Mid_sale = $id GROUP BY DATE_FORMAT(date, '%m%') ORDER BY DATE_FORMAT(date, '%Y-%m-%d') ASC";
-        } else if ($date == 'Y') {
-            $sql = "SELECT oid,sum(cost) cost,SUM(cost-(cost*(5/100))) income,DATE_FORMAT(date, '%Y') date FROM ordersold WHERE Mid_sale = $id GROUP BY DATE_FORMAT(date, '%Y%') ORDER BY DATE_FORMAT(date, '%Y-%m-%d') ASC";
-        } else {
-            $sql = "SELECT oid,cost,(cost-(cost*(5/100))) income,DATE_FORMAT(date, '%d-%m-%Y') date FROM ordersold WHERE Mid_sale = $id ORDER BY DATE_FORMAT(date, '%Y-%m-%d') ASC";
-        }
+        $date = $_POST['myDate'];
+        $date2 = $_POST['myDate2'];
 
-        $qurdata = $conn->prepare($sql);
+        $qurdata = $conn->prepare("SELECT oid,cost,SUM(cost-(cost*(5/100))) income,date FROM ordersold      
+    WHERE Mid_sale=$id AND( DATE_FORMAT(date, '%Y-%m-%d') 
+    BETWEEN '$date' AND '$date2');");
         $qurdata->execute();
         $resdata = $qurdata->fetchAll(PDO::FETCH_ASSOC);
+
+        // if ($date == 'D') {
+        //     $sql = "SELECT oid,cost,SUM(cost-(cost*(5/100))) income,DATE_FORMAT(date, '%d-%m-%Y') date FROM ordersold WHERE Mid_sale = $id GROUP BY DATE_FORMAT(date, '%d%') ORDER BY DATE_FORMAT(date, '%Y-%m-%d') ASC";
+        // } else if ($date == 'M') {
+        //     $sql = "SELECT oid,sum(cost) cost,SUM(cost-(cost*(5/100))) income,DATE_FORMAT(date, '%m-%Y') date FROM ordersold WHERE Mid_sale = $id GROUP BY DATE_FORMAT(date, '%m%') ORDER BY DATE_FORMAT(date, '%Y-%m-%d') ASC";
+        // } else if ($date == 'Y') {
+        //     $sql = "SELECT oid,sum(cost) cost,SUM(cost-(cost*(5/100))) income,DATE_FORMAT(date, '%Y') date FROM ordersold WHERE Mid_sale = $id GROUP BY DATE_FORMAT(date, '%Y%') ORDER BY DATE_FORMAT(date, '%Y-%m-%d') ASC";
+        // } else {
+        //     $sql = "SELECT oid,cost,(cost-(cost*(5/100))) income,DATE_FORMAT(date, '%d-%m-%Y') date FROM ordersold WHERE Mid_sale = $id ORDER BY DATE_FORMAT(date, '%Y-%m-%d') ASC";
+        // }
+
+        // $qurdata = $conn->prepare($sql);
+        // $qurdata->execute();
+        // $resdata = $qurdata->fetchAll(PDO::FETCH_ASSOC);
 
         $count = $conn->prepare("SELECT SUM(cost-(cost*(5/100))) income,SUM(cost*(5/100)) outcome FROM ordersold WHERE Mid_sale = $id");
         $count->execute();
@@ -118,14 +127,18 @@ if (isset($_SESSION['id'])) {
                 <div class="container-fluid d-flex justify-content-between">
                     <h1>สรุปรายรับ-รายจ่าย</h1>
                     <form method="post" class="mt-3">
-                        <label for="date">ดูรายงานประจำ ว/ด/ป :</label>
-                        <select id="date" name="date">
+                        <label for="myDate">เริ่ม:</label>
+                        <input type="date" id="myDate" name="myDate">
+                        <label for="myDate2">ถึง:</label>
+                        <input type="date" id="myDate2" name="myDate2">
+
+                        <!-- <select id="date" name="date">
                             <option value="All">ทั้งหมด</option>
                             <option value="D">วัน</option>
                             <option value="M">เดือน</option>
                             <option value="Y">ปี</option>
-                        </select>
-                        <button type="submit" class="btn btn-primary">ดู</button>
+                        </select> -->
+                        <button type="submit" class="btn btn-primary" name="submit">ดู</button>
                     </form>
                 </div>
 

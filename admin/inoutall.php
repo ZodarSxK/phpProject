@@ -4,21 +4,32 @@ require '../DB/connect.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-    $date = $_POST["date"];
+    $date = $_POST['myDate'];
+    $date2 = $_POST['myDate2'];
 
-    if ($date == 'D') {
-        $sql = "SELECT id,Mid,outcome,SUM(outcome*(5/100)) income,DATE_FORMAT(date, '%d-%m-%Y') date FROM credit WHERE status='สำเร็จ' GROUP BY DATE_FORMAT(date, '%d%') ORDER BY DATE_FORMAT(date, '%Y-%m-%d') ASC";
-    } else if ($date == 'M') {
-        $sql = "SELECT id,Mid,outcome,SUM(outcome*(5/100)) income,DATE_FORMAT(date, '%m-%Y') date FROM credit WHERE status='สำเร็จ' GROUP BY DATE_FORMAT(date, '%m%') ORDER BY DATE_FORMAT(date, '%Y-%m-%d') ASC";
-    } else if ($date == 'Y') {
-        $sql = "SELECT id,Mid,outcome,SUM(outcome*(5/100)) income,DATE_FORMAT(date, '%Y') date FROM credit WHERE status='สำเร็จ' GROUP BY DATE_FORMAT(date, '%Y%') ORDER BY DATE_FORMAT(date, '%Y-%m-%d') ASC";
-    } else {
-        $sql = "SELECT id,Mid,outcome,(outcome*(5/100)) income,DATE_FORMAT(date, '%d-%m-%Y') date FROM credit WHERE status='สำเร็จ' ORDER BY DATE_FORMAT(date, '%Y-%m-%d') ASC";
-    }
+    // echo $date, $date2;
 
-    $qurrole = $conn->prepare($sql);
+    $qurrole = $conn->prepare("SELECT *,SUM(outcome*(5/100)) income FROM credit 
+    WHERE DATE_FORMAT(date, '%Y-%m-%d') 
+    BETWEEN '$date' AND '$date2';");
     $qurrole->execute();
     $resrole = $qurrole->fetchAll(PDO::FETCH_ASSOC);
+
+    // $date = $_POST["date"];
+
+    // if ($date == 'D') {
+    //     $sql = "SELECT id,Mid,outcome,SUM(outcome*(5/100)) income,DATE_FORMAT(date, '%d-%m-%Y') date FROM credit WHERE status='สำเร็จ' GROUP BY DATE_FORMAT(date, '%d%') ORDER BY DATE_FORMAT(date, '%Y-%m-%d') ASC";
+    // } else if ($date == 'M') {
+    //     $sql = "SELECT id,Mid,outcome,SUM(outcome*(5/100)) income,DATE_FORMAT(date, '%m-%Y') date FROM credit WHERE status='สำเร็จ' GROUP BY DATE_FORMAT(date, '%m%') ORDER BY DATE_FORMAT(date, '%Y-%m-%d') ASC";
+    // } else if ($date == 'Y') {
+    //     $sql = "SELECT id,Mid,outcome,SUM(outcome*(5/100)) income,DATE_FORMAT(date, '%Y') date FROM credit WHERE status='สำเร็จ' GROUP BY DATE_FORMAT(date, '%Y%') ORDER BY DATE_FORMAT(date, '%Y-%m-%d') ASC";
+    // } else {
+    //     $sql = "SELECT id,Mid,outcome,(outcome*(5/100)) income,DATE_FORMAT(date, '%d-%m-%Y') date FROM credit WHERE status='สำเร็จ' ORDER BY DATE_FORMAT(date, '%Y-%m-%d') ASC";
+    // }
+
+    // $qurrole = $conn->prepare($sql);
+    // $qurrole->execute();
+    // $resrole = $qurrole->fetchAll(PDO::FETCH_ASSOC);
 
     $count = $conn->prepare("SELECT SUM(outcome*(5/100)) income FROM credit WHERE status = 'สำเร็จ'");
     $count->execute();
@@ -87,6 +98,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <a class="list-group-item list-group-item-action list-group-item-light p-3" href="verifysaler.php">ยืนยันตัวตนผู้ขาย</a>
                 <a class="list-group-item list-group-item-action list-group-item-light p-3" href="in-outcome.php">รายการขอถอนเงิน</a>
                 <a class="list-group-item list-group-item-action list-group-item-light p-3" href="info.php">ข้อมูลส่วนตัว</a>
+                <a class="list-group-item list-group-item-action list-group-item-light p-3" href="comment.php">คอมเม้น</a>
             </div>
         </div>
         <!-- Page content wrapper-->
@@ -110,14 +122,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <div class="container-fluid d-flex justify-content-between">
                     <h1>สรุปรายรับ-รายจ่าย</h1>
                     <form method="post" class="mt-3">
-                        <label for="date">ดูรายงานประจำ ว/ด/ป :</label>
-                        <select id="date" name="date">
+                        <label for="myDate">เริ่ม:</label>
+                        <input type="date" id="myDate" name="myDate">
+                        <label for="myDate2">ถึง:</label>
+                        <input type="date" id="myDate2" name="myDate2">
+
+                        <!-- <select id="date" name="date">
                             <option value="All">ทั้งหมด</option>
                             <option value="D">วัน</option>
                             <option value="M">เดือน</option>
                             <option value="Y">ปี</option>
-                        </select>
-                        <button type="submit" class="btn btn-primary">ดู</button>
+                        </select> -->
+                        <button type="submit" class="btn btn-primary" name="submit">ดู</button>
                     </form>
                 </div>
 

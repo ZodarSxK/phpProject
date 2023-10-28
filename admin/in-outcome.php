@@ -40,6 +40,8 @@ if (isset($_GET['id'])) {
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
     <!-- Core theme CSS (includes Bootstrap)-->
     <link href="./assets/css/styles.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <!-- IONICONS -->
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
@@ -72,6 +74,7 @@ if (isset($_GET['id'])) {
                 <a class="list-group-item list-group-item-action list-group-item-light p-3" href="verifysaler.php">ยืนยันตัวตนผู้ขาย</a>
                 <a class="list-group-item list-group-item-action list-group-item-light p-3" href="in-outcome.php">รายการขอถอนเงิน</a>
                 <a class="list-group-item list-group-item-action list-group-item-light p-3" href="info.php">ข้อมูลส่วนตัว</a>
+                <a class="list-group-item list-group-item-action list-group-item-light p-3" href="comment.php">คอมเม้น</a>
             </div>
         </div>
         <!-- Page content wrapper-->
@@ -121,7 +124,7 @@ if (isset($_GET['id'])) {
                             </tr>
                         </thead>
                         <?php
-                        $qurrole = $conn->prepare("SELECT * FROM credit");
+                        $qurrole = $conn->prepare("SELECT * FROM credit INNER JOIN members ON credit.Mid = members.Mid");
                         $qurrole->execute();
 
                         $resrole = $qurrole->fetchAll(PDO::FETCH_ASSOC);
@@ -132,7 +135,7 @@ if (isset($_GET['id'])) {
                                 <tbody>
                                     <tr>
                                         <td><?= $row['id'] ?></td>
-                                        <td><?= $row['Mid'] ?></td>
+                                        <td><a href="#" title="ข้อมูลผู้ขาย" data-bs-html="true" data-bs-toggle="popover" data-bs-trigger="hover" data-bs-content="<h1><?=$row['name']?></h1><?=$row['descs']?>"><?= $row['Mid'] ?></a></td>
                                         <td><?= $row['namebank'] ?></td>
                                         <td><?= $row['outcome'] ?></td>
                                         <td>
@@ -166,7 +169,12 @@ if (isset($_GET['id'])) {
     <script>
         new DataTable('#myTable');
     </script>
-
+    <script>
+        var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))
+        var popoverList = popoverTriggerList.map(function(popoverTriggerEl) {
+            return new bootstrap.Popover(popoverTriggerEl)
+        })
+    </script>
 </body>
 
 </html>
